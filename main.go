@@ -63,7 +63,7 @@ func main() {
 	app.Post("/api/edittask", handlers.Edittask)                      // แก้ไขงาน
 	app.Get("/api/gettaskevidence/:taskID", handlers.GetTaskEvidence) // เรียกข้อมูลที่ผู้ใช้ส่งงานมา
 	//app.Post("/api/tasksuccescheck", nil)                             // โหลดข้อมูลที่ผู้ใช้ส่งเข้ามา สำหรับตรวจสอบงาน
-	app.Post("/api/tasksucces", handlers.TaskSuccess) // การอนุมัติงาน(เสร็จสิ้นงาน)
+	app.Post("/api/tasksuccess", handlers.TaskSuccess) // การอนุมัติงาน(เสร็จสิ้นงาน)
 	//app.Post("/api/loaddetailfromreport", nil)                        // โหลดข้อมูลงานจาก รีพอร์ต
 
 	//ผู้รับงาน
@@ -74,6 +74,7 @@ func main() {
 
 	//FCM
 	app.Post("/api/fcmsend", handlers.SendFCM)
+	app.Post("/api/fcmsendtoperintask", handlers.SendFCM2PInT) //ใช้ทดสอบส่งแจ้งเตือนไปหาผู้ใช้ที่รับงานนั้น
 
 	app.Get("/", handlers.ApiInfo)
 

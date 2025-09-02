@@ -5,19 +5,19 @@ import (
 )
 
 type GuestReportInfo struct {
-	Report_ID  int    `db:"report_id" json:"report_id"`   //Guest_Reports
-	Title      string `db:"title" json:"title"`           //Guest_Reports
-	Email      string `db:"email" json:"email"`           //Guest_Reports
-	Detail     string `db:"detail" json:"detail"`         //Guest_Reports
-	Location   string `db:"location" json:"location"`     //Guest_Reports
-	Created_at string `db:"created_at" json:"created_at"` //Guest_Reports
-	File       string `db:"file" json:"file"`             //Guest_Reports
+	Report_ID  int    `db:"report_id" json:"report_id"`   //Reports
+	Title      string `db:"title" json:"title"`           //Reports
+	Email      string `db:"email" json:"email"`           //Reports
+	Detail     string `db:"detail" json:"detail"`         //Reports
+	Location   string `db:"location" json:"location"`     //Reports
+	Created_at string `db:"created_at" json:"created_at"` //Reports
+	File       string `db:"file" json:"file"`             //Reports
 }
 
 func GuestReport(db *sqlx.DB, greportInfo *GuestReportInfo) error {
 
 	_, err := db.Exec(
-		`INSERT INTO "Guest_Reports" (title, email, detail, location, file, created_at)
+		`INSERT INTO "Reports" (title, email, detail, location, file, created_at)
 		VALUES ($1, $2, $3, $4, $5,NOW())`,
 		greportInfo.Title,
 		greportInfo.Email,
