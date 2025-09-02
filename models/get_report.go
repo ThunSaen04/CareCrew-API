@@ -6,7 +6,7 @@ func GetReport(db *sqlx.DB) ([]GuestReportInfo, error) {
 	gReport := []GuestReportInfo{}
 
 	query := `SELECT g.report_id, g.email, g.detail, g.location, g.created_at
-	FROM "Guest_Reports" g
+	FROM "Reports" g
 	ORDER BY g.report_id`
 
 	err := db.Select(&gReport, query)

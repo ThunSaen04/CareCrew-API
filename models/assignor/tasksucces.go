@@ -5,11 +5,13 @@ import (
 	"log"
 
 	"github.com/jmoiron/sqlx"
+	"github.com/project/carecrew/orther"
 )
 
 type taskStatus struct {
-	Completed bool `db:"completed" json:"completed"`
-	Status    int  `db:"status_type_id" json:"status_type_id"`
+	Completed bool   `db:"completed" json:"completed"`
+	Status    int    `db:"status_type_id" json:"status_type_id"`
+	Title     string `db:"title" json:"title"`
 }
 
 func TaskSuccess(db *sqlx.DB, taskID int) error {
@@ -22,8 +24,9 @@ func TaskSuccess(db *sqlx.DB, taskID int) error {
 
 	var task taskStatus
 	query := `
-		SELECT t.completed, t.status_type_id
+		SELECT t.completed, t.status_type_id, td.title
 		FROM "Tasks" t
+		LEFT JOIN "Tasks_detail" td ON t.task_id = td.task_id
 		WHERE t.task_id = $1
 	`
 	err = tranX.Get(&task, query, taskID)
@@ -51,7 +54,13 @@ func TaskSuccess(db *sqlx.DB, taskID int) error {
 	if err != nil {
 		return err
 	}
+	sendinfo := orther.SendNotiInfo{
+		Task_id: taskID,
+		Title:   task.Title,
+		Body:    "งานนี้สิ้นสุดเรียบร้อย",
+	}
 
+	orther.SendNotiSuccessToPerInTask(db, &sendinfo)
 	log.Printf("[System] ยืนยันการตรวบสอบงานหมายเลข: %d แล้ว", taskID)
 	return nil
 }

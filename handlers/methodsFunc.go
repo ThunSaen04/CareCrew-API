@@ -877,4 +877,32 @@ func SendFCM(c *fiber.Ctx) error {
 	})
 }
 
+// ส่งแจ้งเตือนเฉพาะคนที่รับงาน (ใช้ทดสอบ)
+func SendFCM2PInT(c *fiber.Ctx) error {
+	c.Set("Content-Type", "application/json; charset=utf-8")
+	var s orther.SendNotiInfo
+	err := c.BodyParser(&s)
+	if err != nil {
+		log.Print("[Error] รูปแบบส่งแจ้งเตือนไม่ถูกต้อง")
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"success": false,
+			"message": "รูปแบบส่งแจ้งเตือนไม่ถูกต้อง",
+		})
+	}
+	err = orther.SendNotiSuccessToPerInTask(config.DB, &s)
+	if err != err {
+		log.Print("[Error] เกิดข้อผิดพลาดในการส่งแจ้งเตือน")
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"success": false,
+			"message": "เกิดข้อผิดพลาดในการส่งแจ้งเตือน",
+		})
+	}
+
+	log.Print("[System] ส่งแจ้งเตือนหาผู้ใช้งานสำเร็จ")
+	return c.JSON(fiber.Map{
+		"success": true,
+		"message": "ส่งแจ้งเตือนสำเร็จแล้ว",
+	})
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////

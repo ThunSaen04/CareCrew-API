@@ -65,3 +65,48 @@ func SendNotificationToAll(db *sqlx.DB, title, body string) error {
 
 	return nil
 }
+
+type SendNotiInfo struct {
+	Task_id int    `db:"task_id" json:"task_id"`
+	Title   string `json:"title"`
+	Body    string `json:"body"`
+}
+
+func SendNotiSuccessToPerInTask(db *sqlx.DB, sendnotiinfo *SendNotiInfo) error {
+	ctx := context.Background()
+	client, err := fcm.NewClient(
+		ctx,
+		fcm.WithCredentialsFile(config.FullFCMPath),
+	)
+	if err != nil {
+		return err
+	}
+
+	var tokens []string
+	err = db.Select(&tokens, `
+        SELECT DISTINCT t.token
+        FROM "Tasks_assignment" a
+        JOIN "FCM_Tokens" t ON t.personnel_id = a.personnel_id
+        WHERE a.task_id = $1
+    `, sendnotiinfo.Task_id)
+	if err != nil {
+		return err
+	}
+	if len(tokens) == 0 {
+		log.Println("[Warning] ไม่พบ Token ของผู้ที่รับงานนี้")
+		return err
+	}
+	msg := &messaging.MulticastMessage{
+		Notification: &messaging.Notification{
+			Title: "งาน " + sendnotiinfo.Title + " สิ้นสุดแล้ว!!",
+			Body:  sendnotiinfo.Body,
+		},
+		Tokens: tokens,
+	}
+	resp, err := client.SendMulticast(ctx, msg)
+	if err != nil {
+		return err
+	}
+	fmt.Println("Success:", resp.SuccessCount, "Failure:", resp.FailureCount)
+	return nil
+}
