@@ -47,14 +47,14 @@ func main() {
 	app.Get("/api/taskprioritylist", handlers.GetTaskPriorityList)                       // เรียกข้อมูลลำดับความสำคัญ
 
 	//Post Methods
-	app.Post("/api/login", handlers.Auth)          // ล็อคอิน
+	//app.Post("/api/login", handlers.Auth)          // ล็อคอิน
 	app.Post("/api/loginv2", handlers.Authv2)      // ล็อคอินv2 ส่ง FCM Device Token มาด้วยด้วย
 	app.Post("/api/register", handlers.Register)   // สมัคร ปล.ใช้ได้เฉพาะผู้ดูแลระบบ ที่มีสิทธิในการสร้างผู้ใช้งาน
 	app.Post("/api/removeacc", handlers.Removeacc) // ลบบัญชีผู้ใช้งาน
 
 	app.Post("/api/lrubTasksv2", handlers.GetlrubTasksCountv2) // เรียกข้อมูลว่างานนั้นมีคนรับไปกี่คนและมีใครบ้าง แบบ Post ระบบ task_id
 
-	app.Post("/api/report", handlers.Report)     // รีพอร์ต
+	//app.Post("/api/report", handlers.Report)     // รีพอร์ต
 	app.Post("/api/reportv2", handlers.Reportv2) // รีพอร์ต2 รับหลายรูป
 
 	//ผู้มอบหมายงาน
@@ -73,8 +73,8 @@ func main() {
 	app.Post("/api/yoklerksongtask", handlers.YokLerkSongTask) // ยกเลิกส่งงาน
 
 	//FCM
-	app.Post("/api/fcmsend", handlers.SendFCM)
-	app.Post("/api/fcmsendtoperintask", handlers.SendFCM2PInT) //ใช้ทดสอบส่งแจ้งเตือนไปหาผู้ใช้ที่รับงานนั้น
+	//app.Post("/api/fcmsend", handlers.SendFCM)
+	//app.Post("/api/fcmsendtoperintask", handlers.SendFCM2PInT) //ใช้ทดสอบส่งแจ้งเตือนไปหาผู้ใช้ที่รับงานนั้น
 
 	app.Get("/", handlers.ApiInfo)
 
