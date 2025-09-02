@@ -19,8 +19,8 @@ import (
 )
 
 var Name = "CareCrew Backend API"
-var Versions = "1.94"
-var Last_Update = "08-29-25"
+var Versions = "1.95"
+var Last_Update = "09-03-25"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
