@@ -90,15 +90,16 @@ func AuthV2(db *sqlx.DB, PersonnelID int, Password string, Token string) (*login
 		return nil, err
 	}
 
-	_, err = tranX.Exec(`
-		INSERT INTO "FCM_Tokens" (personnel_id, token)
-		VALUES ($1, $2)
-		ON CONFLICT (token) DO UPDATE 
-		SET personnel_id = $1, updated_at = NOW()
-		`,
-		PersonnelID, Token)
-	if err != nil {
-		return nil, err
+	if Token != "" {
+		_, err = tranX.Exec(`
+            INSERT INTO "FCM_Tokens" (personnel_id, token)
+            VALUES ($1, $2)
+            ON CONFLICT (token) DO UPDATE 
+            SET personnel_id = $1, updated_at = NOW()
+        `, PersonnelID, Token)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	err = tranX.Commit()
