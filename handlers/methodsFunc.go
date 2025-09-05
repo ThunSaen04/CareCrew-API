@@ -565,7 +565,31 @@ func Report(c *fiber.Ctx) error {
 	})
 }
 
+type ReportInfoV2 struct {
+	Success     bool     `json:"success"`
+	Message     string   `json:"message"`
+	Title       string   `json:"Title"`
+	PersonnelID int      `json:"PersonnelID"`
+	Detail      string   `json:"Detail"`
+	Location    string   `json:"Location"`
+	Files       []string `json:"Files"`
+}
+
 // รายงาน v2
+// Reportv2 godoc
+// @Summary รายงานเวอร์ชั่น2
+// @Tags PostMethods
+// @Accept json
+// @Produce json
+// @Param title formData string true "ชื่อรายงาน"
+// @Param personnel_id formData int true "รหัสบุคลากร"
+// @Param detail formData string true "รายละเอียดรายงาน"
+// @Param location formData string true "สถานที่เกิดเหตุ"
+// @Param img formData file true "ไฟล์รูปภาพ" collectionFormat(multi)
+// @Success 200 {object} ReportInfoV2
+// @Failure 400 {object} Res
+// @Failure 500 {object} Res
+// @Router /api/lrubTasksv2 [post]
 func Reportv2(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 
@@ -678,14 +702,14 @@ func Reportv2(c *fiber.Ctx) error {
 	}
 
 	log.Print("[System] พบการแจ้งปัญหาใหม่")
-	return c.JSON(fiber.Map{
-		"success":     true,
-		"message":     "ส่งรายงานสำเร็จแล้ว",
-		"Title":       title,
-		"PersonnelID": personnelid,
-		"Detail":      detail,
-		"Location":    location,
-		"Files":       savedPaths,
+	return c.JSON(ReportInfoV2{
+		Success:     true,
+		Message:     "ส่งรายงานสำเร็จแล้ว",
+		Title:       title,
+		PersonnelID: personnelid,
+		Detail:      detail,
+		Location:    location,
+		Files:       savedPaths,
 	})
 }
 
