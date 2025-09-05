@@ -18,6 +18,84 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/addtask": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Assignor"
+                ],
+                "summary": "เพิ่มงาน",
+                "parameters": [
+                    {
+                        "description": "ข้อมูลการเพิ่มงาน",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/assignor.AddTaskInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/edittask": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Assignor"
+                ],
+                "summary": "แก้ไขงาน",
+                "parameters": [
+                    {
+                        "description": "ข้อมูลการแก้ไขงาน",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/assignor.EditTaskInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    }
+                }
+            }
+        },
         "/api/gettaskevidence/{taskID}": {
             "get": {
                 "produces": [
@@ -175,6 +253,45 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/models.LrubTasksCountInfo"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/lrubtask": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Worker"
+                ],
+                "summary": "การรับงาน",
+                "parameters": [
+                    {
+                        "description": "ข้อมูลการรับงาน",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/worker.PerLrubTaskInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
                         }
                     },
                     "400": {
@@ -398,6 +515,167 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/removetask": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Assignor"
+                ],
+                "summary": "ลบงาน",
+                "parameters": [
+                    {
+                        "description": "ข้อมูลการลบงาน",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/assignor.RemoveTaskInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/reportv2": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Worker"
+                ],
+                "summary": "รายงานเวอร์ชั่น2",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ชื่อรายงาน",
+                        "name": "title",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "รหัสบุคลากร",
+                        "name": "personnel_id",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "รายละเอียดรายงาน",
+                        "name": "detail",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "สถานที่เกิดเหตุ",
+                        "name": "location",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "ไฟล์รูปภาพ",
+                        "name": "img",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.ReportInfoV2"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/songtask": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Worker"
+                ],
+                "summary": "การส่งงาน",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ชื่อรายงาน",
+                        "name": "task_id",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "รหัสบุคลากร",
+                        "name": "personnel_id",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "ไฟล์รูปภาพ",
+                        "name": "img",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    }
+                }
+            }
+        },
         "/api/taskprioritylist": {
             "get": {
                 "produces": [
@@ -494,6 +772,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/tasksuccess": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Assignor"
+                ],
+                "summary": "การอนุมัติงาน(เสร็จสิ้นงาน)",
+                "parameters": [
+                    {
+                        "description": "ข้อมูลการอนุมัติงาน(เสร็จสิ้นงาน)",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handlers.EditTaskSt"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    }
+                }
+            }
+        },
         "/api/tasktypelist": {
             "get": {
                 "produces": [
@@ -521,9 +838,161 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/yoklerksongtask": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Worker"
+                ],
+                "summary": "การยกเลิกส่งงาน",
+                "parameters": [
+                    {
+                        "description": "ข้อมูลการยกเลิกส่งงาน",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/worker.YokLerkSongTaskInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/yoklerktask": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Worker"
+                ],
+                "summary": "การยกเลิกงาน",
+                "parameters": [
+                    {
+                        "description": "ข้อมูลการยกเลิกงาน",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/worker.YokLerkTaskInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "assignor.AddTaskInfo": {
+            "type": "object",
+            "properties": {
+                "assigned_by": {
+                    "description": "Tasks_detail (ใช้ PersonnelIDDD)",
+                    "type": "integer"
+                },
+                "detail": {
+                    "description": "Tasks_detail",
+                    "type": "string"
+                },
+                "location": {
+                    "description": "Tasks_detail",
+                    "type": "string"
+                },
+                "people_needed": {
+                    "description": "Tasks_detail",
+                    "type": "integer"
+                },
+                "priority_type_id": {
+                    "description": "Task",
+                    "type": "integer"
+                },
+                "task_type_id": {
+                    "description": "Task",
+                    "type": "integer"
+                },
+                "title": {
+                    "description": "Tasks_detail",
+                    "type": "string"
+                }
+            }
+        },
+        "assignor.EditTaskInfo": {
+            "type": "object",
+            "properties": {
+                "detail": {
+                    "description": "Tasks_detail",
+                    "type": "string"
+                },
+                "location": {
+                    "description": "Tasks_detail",
+                    "type": "string"
+                },
+                "people_needed": {
+                    "description": "Tasks_detail",
+                    "type": "integer"
+                },
+                "priority_type_id": {
+                    "description": "Tasks",
+                    "type": "integer"
+                },
+                "task_id": {
+                    "description": "Tasks",
+                    "type": "integer"
+                },
+                "task_type_id": {
+                    "description": "Tasks",
+                    "type": "integer"
+                },
+                "title": {
+                    "description": "Tasks_detail",
+                    "type": "string"
+                }
+            }
+        },
+        "assignor.RemoveTaskInfo": {
+            "type": "object",
+            "properties": {
+                "task_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "handlers.AuthInfoV2": {
             "type": "object",
             "properties": {
@@ -555,6 +1024,14 @@ const docTemplate = `{
                 }
             }
         },
+        "handlers.EditTaskSt": {
+            "type": "object",
+            "properties": {
+                "task_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "handlers.LrubTasksCountvTwo": {
             "type": "object",
             "properties": {
@@ -571,6 +1048,35 @@ const docTemplate = `{
                 },
                 "personnel_id": {
                     "type": "integer"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "handlers.ReportInfoV2": {
+            "type": "object",
+            "properties": {
+                "Detail": {
+                    "type": "string"
+                },
+                "Files": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "Location": {
+                    "type": "string"
+                },
+                "PersonnelID": {
+                    "type": "integer"
+                },
+                "Title": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
                 },
                 "success": {
                     "type": "boolean"
@@ -827,6 +1333,41 @@ const docTemplate = `{
                 },
                 "role_type_id": {
                     "description": "Role_types",
+                    "type": "integer"
+                }
+            }
+        },
+        "worker.PerLrubTaskInfo": {
+            "type": "object",
+            "properties": {
+                "personnel_id": {
+                    "description": "Personnels",
+                    "type": "integer"
+                },
+                "task_id": {
+                    "description": "Tasks",
+                    "type": "integer"
+                }
+            }
+        },
+        "worker.YokLerkSongTaskInfo": {
+            "type": "object",
+            "properties": {
+                "personnel_id": {
+                    "type": "integer"
+                },
+                "task_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "worker.YokLerkTaskInfo": {
+            "type": "object",
+            "properties": {
+                "personnel_id": {
+                    "type": "integer"
+                },
+                "task_id": {
                     "type": "integer"
                 }
             }

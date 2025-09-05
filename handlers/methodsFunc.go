@@ -24,10 +24,18 @@ type Res struct { //สำหรับ Swagger
 }
 
 var Name = "CareCrew Backend API"
-var Versions = "1.96"
-var Last_Update = "09-03-25"
+var Versions = "0.2.0"
+var Last_Update = "09-06-25"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
+
+func FixFilename(name string) string {
+	no := []string{"<", ">", ":", "\"", "/", "\\", "|", "?", "*"}
+	for _, f := range no {
+		name = strings.ReplaceAll(name, f, "_")
+	}
+	return name
+}
 
 func ApiInfo(c *fiber.Ctx) error {
 	return c.SendString(fmt.Sprintf(
@@ -578,18 +586,18 @@ type ReportInfoV2 struct {
 // รายงาน v2
 // Reportv2 godoc
 // @Summary รายงานเวอร์ชั่น2
-// @Tags PostMethods
+// @Tags Worker
 // @Accept json
 // @Produce json
 // @Param title formData string true "ชื่อรายงาน"
 // @Param personnel_id formData int true "รหัสบุคลากร"
 // @Param detail formData string true "รายละเอียดรายงาน"
 // @Param location formData string true "สถานที่เกิดเหตุ"
-// @Param img formData file true "ไฟล์รูปภาพ" collectionFormat(multi)
+// @Param img formData file true "ไฟล์รูปภาพ"
 // @Success 200 {object} ReportInfoV2
 // @Failure 400 {object} Res
 // @Failure 500 {object} Res
-// @Router /api/lrubTasksv2 [post]
+// @Router /api/reportv2 [post]
 func Reportv2(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 
@@ -655,7 +663,7 @@ func Reportv2(c *fiber.Ctx) error {
 		repLocation := strings.ReplaceAll(location, " ", "_")
 		timestmp := time.Now().Format("20060102_150405")
 		ext := filepath.Ext(file.Filename)
-		filename := fmt.Sprintf("%d_%s_%s_%s%s", index, repTitle, repLocation, timestmp, ext)
+		filename := FixFilename(fmt.Sprintf("%d_%s_%s_%s%s", index, repTitle, repLocation, timestmp, ext))
 		//filename := fmt.Sprintf("%s_%s", repLocation, timestmp)
 
 		fileType := file.Header.Get("Content-Type")
@@ -714,6 +722,15 @@ func Reportv2(c *fiber.Ctx) error {
 }
 
 // เพิ่มงาน
+// Addtask godoc
+// @Summary เพิ่มงาน
+// @Tags Assignor
+// @Accept json
+// @Produce json
+// @Param request body assignor.AddTaskInfo true "ข้อมูลการเพิ่มงาน"
+// @Success 200 {object} Res
+// @Failure 400 {object} Res
+// @Router /api/addtask [post]
 func Addtask(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 
@@ -744,6 +761,15 @@ func Addtask(c *fiber.Ctx) error {
 }
 
 // แก้ไขงาน
+// Edittask godoc
+// @Summary แก้ไขงาน
+// @Tags Assignor
+// @Accept json
+// @Produce json
+// @Param request body assignor.EditTaskInfo true "ข้อมูลการแก้ไขงาน"
+// @Success 200 {object} Res
+// @Failure 400 {object} Res
+// @Router /api/edittask [post]
 func Edittask(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 
@@ -775,6 +801,15 @@ func Edittask(c *fiber.Ctx) error {
 }
 
 // ลบงาน
+// Removetask godoc
+// @Summary ลบงาน
+// @Tags Assignor
+// @Accept json
+// @Produce json
+// @Param request body assignor.RemoveTaskInfo true "ข้อมูลการลบงาน"
+// @Success 200 {object} Res
+// @Failure 400 {object} Res
+// @Router /api/removetask [post]
 func Removetask(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 	var removetaskinfo assignor.RemoveTaskInfo
@@ -804,12 +839,23 @@ func Removetask(c *fiber.Ctx) error {
 	})
 }
 
+type EditTaskSt struct {
+	TaskID int `json:"task_id"`
+}
+
 // การอนุมัติงาน(เสร็จสิ้นงาน)
+// TaskSuccess godoc
+// @Summary การอนุมัติงาน(เสร็จสิ้นงาน)
+// @Tags Assignor
+// @Accept json
+// @Produce json
+// @Param request body EditTaskSt true "ข้อมูลการอนุมัติงาน(เสร็จสิ้นงาน)"
+// @Success 200 {object} Res
+// @Failure 400 {object} Res
+// @Router /api/tasksuccess [post]
 func TaskSuccess(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
-	var tasksuccesinfo struct {
-		TaskID int `json:"task_id"`
-	}
+	var tasksuccesinfo EditTaskSt
 
 	err := c.BodyParser(&tasksuccesinfo)
 	if err != nil {
@@ -836,6 +882,15 @@ func TaskSuccess(c *fiber.Ctx) error {
 }
 
 // รับงาน
+// Lrubtask godoc
+// @Summary การรับงาน
+// @Tags Worker
+// @Accept json
+// @Produce json
+// @Param request body worker.PerLrubTaskInfo true "ข้อมูลการรับงาน"
+// @Success 200 {object} Res
+// @Failure 400 {object} Res
+// @Router /api/lrubtask [post]
 func Lrubtask(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 
@@ -864,6 +919,15 @@ func Lrubtask(c *fiber.Ctx) error {
 }
 
 // ยกเลิกงาน
+// Yoklerk godoc
+// @Summary การยกเลิกงาน
+// @Tags Worker
+// @Accept json
+// @Produce json
+// @Param request body worker.YokLerkTaskInfo true "ข้อมูลการยกเลิกงาน"
+// @Success 200 {object} Res
+// @Failure 400 {object} Res
+// @Router /api/yoklerktask [post]
 func Yoklerk(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 
@@ -892,7 +956,24 @@ func Yoklerk(c *fiber.Ctx) error {
 	})
 }
 
+type SongtaskRes struct {
+	Success bool     `json:"success"`
+	Message string   `json:"message"`
+	Files   []string `json:"Files"`
+}
+
 // ส่งงาน
+// Songtask godoc
+// @Summary การส่งงาน
+// @Tags Worker
+// @Accept json
+// @Produce json
+// @Param task_id formData string true "ชื่อรายงาน"
+// @Param personnel_id formData int true "รหัสบุคลากร"
+// @Param img formData file true "ไฟล์รูปภาพ"
+// @Success 200 {object} Res
+// @Failure 400 {object} Res
+// @Router /api/songtask [post]
 func Songtask(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 
@@ -938,7 +1019,7 @@ func Songtask(c *fiber.Ctx) error {
 	for index, file := range files {
 		timestmp := time.Now().Format("20060102_150405")
 		ext := filepath.Ext(file.Filename)
-		filename := fmt.Sprintf("%d_tid%d_pid%d_%s%s", index, taskID, personnelID, timestmp, ext)
+		filename := FixFilename(fmt.Sprintf("%d_tid%d_pid%d_%s%s", index, taskID, personnelID, timestmp, ext))
 
 		fileType := file.Header.Get("Content-Type")
 		if !allowedTypes[fileType] {
@@ -981,14 +1062,23 @@ func Songtask(c *fiber.Ctx) error {
 	}
 
 	log.Print("[System] ผู้ใช้งานหมายเลข: ", personnelID, " ส่งงานหมายเลข: ", taskID, " สำเร็จ")
-	return c.JSON(fiber.Map{
-		"success": true,
-		"message": "ส่งงานสำเร็จแล้ว",
-		"files":   savedPaths,
+	return c.JSON(SongtaskRes{
+		Success: true,
+		Message: "ส่งงานสำเร็จแล้ว",
+		Files:   savedPaths,
 	})
 }
 
 // ยกเลิกส่งงาน
+// YokLerkSongTask godoc
+// @Summary การยกเลิกส่งงาน
+// @Tags Worker
+// @Accept json
+// @Produce json
+// @Param request body worker.YokLerkSongTaskInfo true "ข้อมูลการยกเลิกส่งงาน"
+// @Success 200 {object} Res
+// @Failure 400 {object} Res
+// @Router /api/yoklerksongtask [post]
 func YokLerkSongTask(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 
@@ -1050,7 +1140,7 @@ func SendFCM(c *fiber.Ctx) error {
 	})
 }
 
-// ส่งแจ้งเตือนเฉพาะคนที่รับงาน (ใช้ทดสอบ)
+// ส่งแจ้งเตือนเฉพาะคนที่รับงาน
 func SendFCM2PInT(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 	var s orther.SendNotiInfo

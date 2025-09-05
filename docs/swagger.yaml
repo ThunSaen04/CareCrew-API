@@ -1,5 +1,58 @@
 basePath: /
 definitions:
+  assignor.AddTaskInfo:
+    properties:
+      assigned_by:
+        description: Tasks_detail (ใช้ PersonnelIDDD)
+        type: integer
+      detail:
+        description: Tasks_detail
+        type: string
+      location:
+        description: Tasks_detail
+        type: string
+      people_needed:
+        description: Tasks_detail
+        type: integer
+      priority_type_id:
+        description: Task
+        type: integer
+      task_type_id:
+        description: Task
+        type: integer
+      title:
+        description: Tasks_detail
+        type: string
+    type: object
+  assignor.EditTaskInfo:
+    properties:
+      detail:
+        description: Tasks_detail
+        type: string
+      location:
+        description: Tasks_detail
+        type: string
+      people_needed:
+        description: Tasks_detail
+        type: integer
+      priority_type_id:
+        description: Tasks
+        type: integer
+      task_id:
+        description: Tasks
+        type: integer
+      task_type_id:
+        description: Tasks
+        type: integer
+      title:
+        description: Tasks_detail
+        type: string
+    type: object
+  assignor.RemoveTaskInfo:
+    properties:
+      task_id:
+        type: integer
+    type: object
   handlers.AuthInfoV2:
     properties:
       password:
@@ -20,6 +73,11 @@ definitions:
       success:
         type: boolean
     type: object
+  handlers.EditTaskSt:
+    properties:
+      task_id:
+        type: integer
+    type: object
   handlers.LrubTasksCountvTwo:
     properties:
       task_id:
@@ -31,6 +89,25 @@ definitions:
         type: string
       personnel_id:
         type: integer
+      success:
+        type: boolean
+    type: object
+  handlers.ReportInfoV2:
+    properties:
+      Detail:
+        type: string
+      Files:
+        items:
+          type: string
+        type: array
+      Location:
+        type: string
+      PersonnelID:
+        type: integer
+      Title:
+        type: string
+      message:
+        type: string
       success:
         type: boolean
     type: object
@@ -214,6 +291,29 @@ definitions:
         description: Role_types
         type: integer
     type: object
+  worker.PerLrubTaskInfo:
+    properties:
+      personnel_id:
+        description: Personnels
+        type: integer
+      task_id:
+        description: Tasks
+        type: integer
+    type: object
+  worker.YokLerkSongTaskInfo:
+    properties:
+      personnel_id:
+        type: integer
+      task_id:
+        type: integer
+    type: object
+  worker.YokLerkTaskInfo:
+    properties:
+      personnel_id:
+        type: integer
+      task_id:
+        type: integer
+    type: object
 host: api.lcadv.online
 info:
   contact:
@@ -222,6 +322,56 @@ info:
   description: API สำหรับแอปพลิเคชันจัดสรรงานบุคลากรแม่บ้านและภารโรง
   title: Backend API CareCrew
 paths:
+  /api/addtask:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ข้อมูลการเพิ่มงาน
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/assignor.AddTaskInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Res'
+      summary: เพิ่มงาน
+      tags:
+      - Assignor
+  /api/edittask:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ข้อมูลการแก้ไขงาน
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/assignor.EditTaskInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Res'
+      summary: แก้ไขงาน
+      tags:
+      - Assignor
   /api/gettaskevidence/{taskID}:
     get:
       parameters:
@@ -330,6 +480,31 @@ paths:
       summary: เรียกข้อมูลว่างานนั้นมีคนรับไปกี่คนและมีใครบ้าง
       tags:
       - PostMethods
+  /api/lrubtask:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ข้อมูลการรับงาน
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/worker.PerLrubTaskInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Res'
+      summary: การรับงาน
+      tags:
+      - Worker
   /api/perlrubTasks:
     get:
       produces:
@@ -467,6 +642,113 @@ paths:
       summary: ลบบัญชี
       tags:
       - Account
+  /api/removetask:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ข้อมูลการลบงาน
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/assignor.RemoveTaskInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Res'
+      summary: ลบงาน
+      tags:
+      - Assignor
+  /api/reportv2:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ชื่อรายงาน
+        in: formData
+        name: title
+        required: true
+        type: string
+      - description: รหัสบุคลากร
+        in: formData
+        name: personnel_id
+        required: true
+        type: integer
+      - description: รายละเอียดรายงาน
+        in: formData
+        name: detail
+        required: true
+        type: string
+      - description: สถานที่เกิดเหตุ
+        in: formData
+        name: location
+        required: true
+        type: string
+      - description: ไฟล์รูปภาพ
+        in: formData
+        name: img
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.ReportInfoV2'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Res'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.Res'
+      summary: รายงานเวอร์ชั่น2
+      tags:
+      - Worker
+  /api/songtask:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ชื่อรายงาน
+        in: formData
+        name: task_id
+        required: true
+        type: string
+      - description: รหัสบุคลากร
+        in: formData
+        name: personnel_id
+        required: true
+        type: integer
+      - description: ไฟล์รูปภาพ
+        in: formData
+        name: img
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Res'
+      summary: การส่งงาน
+      tags:
+      - Worker
   /api/taskprioritylist:
     get:
       produces:
@@ -529,6 +811,31 @@ paths:
       summary: เรียกข้อมูลจากหมายเลขงาน
       tags:
       - GetMethods
+  /api/tasksuccess:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ข้อมูลการอนุมัติงาน(เสร็จสิ้นงาน)
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.EditTaskSt'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Res'
+      summary: การอนุมัติงาน(เสร็จสิ้นงาน)
+      tags:
+      - Assignor
   /api/tasktypelist:
     get:
       produces:
@@ -547,4 +854,54 @@ paths:
       summary: เรียกข้อมูลประเภทงานที่มี
       tags:
       - GetMethods
+  /api/yoklerksongtask:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ข้อมูลการยกเลิกส่งงาน
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/worker.YokLerkSongTaskInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Res'
+      summary: การยกเลิกส่งงาน
+      tags:
+      - Worker
+  /api/yoklerktask:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ข้อมูลการยกเลิกงาน
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/worker.YokLerkTaskInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Res'
+      summary: การยกเลิกงาน
+      tags:
+      - Worker
 swagger: "2.0"

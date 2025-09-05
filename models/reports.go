@@ -1,8 +1,6 @@
 package models
 
 import (
-	"log"
-
 	"github.com/jmoiron/sqlx"
 )
 
@@ -17,8 +15,6 @@ type ReportInfo struct {
 }
 
 func GuestReport(db *sqlx.DB, greportInfo *ReportInfo) error {
-
-	log.Println(greportInfo.Title)
 
 	_, err := db.Exec(
 		`INSERT INTO "Reports" (title, personnel_id, detail, location, file, created_at)
