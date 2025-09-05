@@ -1,0 +1,550 @@
+basePath: /
+definitions:
+  handlers.AuthInfoV2:
+    properties:
+      password:
+        type: string
+      personnel_id:
+        type: integer
+      token:
+        type: string
+    type: object
+  handlers.Authv2Res:
+    properties:
+      message:
+        type: string
+      personnel_id:
+        type: integer
+      role:
+        type: string
+      success:
+        type: boolean
+    type: object
+  handlers.LrubTasksCountvTwo:
+    properties:
+      task_id:
+        type: integer
+    type: object
+  handlers.RegisterRes:
+    properties:
+      message:
+        type: string
+      personnel_id:
+        type: integer
+      success:
+        type: boolean
+    type: object
+  handlers.Res:
+    properties:
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  models.LrubTasksCountInfo:
+    properties:
+      personnel_count:
+        description: Personnels
+        type: integer
+      personnel_ids:
+        description: Personnels
+        type: string
+      personnel_name:
+        description: Personnels
+        type: string
+      task_id:
+        description: Tasks_assignment
+        type: integer
+    type: object
+  models.PersonnelLrubTaskInfo:
+    properties:
+      personnel_id:
+        type: integer
+      task_id:
+        description: task_id รวมกันเป็นสตริง เช่น "1,3,5"
+        type: string
+    type: object
+  models.PersonnelsInfo:
+    properties:
+      first_name:
+        description: Personnels
+        type: string
+      last_name:
+        description: Personnels
+        type: string
+      personnel_id:
+        description: Personnels
+        type: integer
+      phone:
+        description: Personnels
+        type: string
+      role_name:
+        description: Role_types
+        type: string
+    type: object
+  models.ReportInfo:
+    properties:
+      created_at:
+        description: Reports
+        type: string
+      detail:
+        description: Reports
+        type: string
+      file:
+        description: Reports
+        type: string
+      location:
+        description: Reports
+        type: string
+      personnel_id:
+        description: Reports
+        type: integer
+      report_id:
+        description: Reports
+        type: integer
+      title:
+        description: Reports
+        type: string
+    type: object
+  models.SubmitTaskWithID:
+    properties:
+      personnel_id:
+        type: integer
+      submit:
+        type: boolean
+      submit_at:
+        type: string
+      task_id:
+        type: integer
+    type: object
+  models.TaskEvidenceInfo:
+    properties:
+      assigned_by:
+        description: Personnels
+        type: string
+      assignment_id:
+        description: Tasks_assignment
+        type: integer
+      detail:
+        description: Tasks_detail
+        type: string
+      files:
+        items:
+          type: string
+        type: array
+      task_id:
+        description: Tasks_assignment
+        type: integer
+      title:
+        description: Tasks_detail
+        type: string
+      uploaded_at:
+        description: Tasks_attachments
+        type: string
+    type: object
+  models.TaskpriorityInfo:
+    properties:
+      name:
+        description: Priority_types
+        type: string
+      priority_type_id:
+        description: Priority_types
+        type: integer
+    type: object
+  models.TasksInfo:
+    properties:
+      assigned_by:
+        description: Personnels
+        type: string
+      created_at:
+        description: Tasks
+        type: string
+      detail:
+        description: Tasks_detail
+        type: string
+      location:
+        description: Tasks_detail
+        type: string
+      people_needed:
+        description: Tasks_detail
+        type: integer
+      priority_name:
+        description: Priority_type
+        type: string
+      status:
+        description: Status_types
+        type: string
+      task_id:
+        description: Tasks
+        type: integer
+      title:
+        description: Tasks_detail
+        type: string
+      type_name:
+        description: Task_types
+        type: string
+      updated_at:
+        description: Tasks
+        type: string
+    type: object
+  models.TasktypeInfo:
+    properties:
+      name:
+        description: Tasks_detail
+        type: string
+      task_type_id:
+        description: Tasks_detail
+        type: integer
+    type: object
+  orther.RegisterUserInfo:
+    properties:
+      first_name:
+        description: ersonnels
+        type: string
+      last_name:
+        description: Personnels
+        type: string
+      password:
+        description: User
+        type: string
+      phone:
+        description: Personnels
+        type: string
+      role_type_id:
+        description: Role_types
+        type: integer
+    type: object
+host: api.lcadv.online
+info:
+  contact:
+    email: biz.thunsaen@gmail.com
+    name: Thun Saen
+  description: API สำหรับแอปพลิเคชันจัดสรรงานบุคลากรแม่บ้านและภารโรง
+  title: Backend API CareCrew
+paths:
+  /api/gettaskevidence/{taskID}:
+    get:
+      parameters:
+      - description: Task ID
+        in: path
+        name: taskID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.TaskEvidenceInfo'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Res'
+      summary: เรียกข้อมูลที่ผู้ใช้ส่งงานมา
+      tags:
+      - GetMethods
+  /api/greport:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.ReportInfo'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Res'
+      summary: เรียกข้อมูลการแจ้งรายงาน
+      tags:
+      - GetMethods
+  /api/loginv2:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ข้อมูลการเข้าสู่ระบบ
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.AuthInfoV2'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: เข้าสู่ระบบสำเร็จ
+          schema:
+            $ref: '#/definitions/handlers.Authv2Res'
+        "400":
+          description: เข้าสู่ระบบไม่สำเร็จ
+          schema:
+            $ref: '#/definitions/handlers.Res'
+      summary: ล็อคอินเวอร์ชัน 2 (ส่ง Token สำหรับ FCM)
+      tags:
+      - Account
+  /api/lrubTasks:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.LrubTasksCountInfo'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Res'
+      summary: เรียกข้อมูลว่างานนั้นมีคนรับไปกี่คนและมีใครบ้าง
+      tags:
+      - GetMethods
+  /api/lrubTasksv2:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ข้อมูลการเรียกข้อมูลว่างานนั้นมีคนรับไปกี่คนและมีใครบ้าง
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.LrubTasksCountvTwo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.LrubTasksCountInfo'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Res'
+      summary: เรียกข้อมูลว่างานนั้นมีคนรับไปกี่คนและมีใครบ้าง
+      tags:
+      - PostMethods
+  /api/perlrubTasks:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.PersonnelLrubTaskInfo'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Res'
+      summary: ผู้ใช้งานรับงานไหนไปแล้วบ้าง
+      tags:
+      - GetMethods
+  /api/personnels:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.PersonnelsInfo'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Res'
+      summary: เรียกข้อมูลผู้ใช้งานทั้งหมด
+      tags:
+      - GetMethods
+  /api/personnels/{personnelID}:
+    get:
+      parameters:
+      - description: Personnel ID
+        in: path
+        name: personnelID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.PersonnelsInfo'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Res'
+        "404":
+          description: Not Found
+      summary: เรียกข้อมูลจากหมายเลขผู้ใช้งาน
+      tags:
+      - GetMethods
+  /api/persubmittasksbor/{personnelID}/{taskID}:
+    get:
+      parameters:
+      - description: Personnel ID
+        in: path
+        name: personnelID
+        required: true
+        type: integer
+      - description: Task ID
+        in: path
+        name: taskID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SubmitTaskWithID'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Res'
+      summary: ผู้ใช้คนนี้ส่งงานนี้ยัง
+      tags:
+      - GetMethods
+  /api/register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ข้อมูลการสมัครบัญชีผู้ใช้
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/orther.RegisterUserInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: สมัครบัญชีผู้ใช้สำเร็จ
+          schema:
+            $ref: '#/definitions/handlers.RegisterRes'
+        "400":
+          description: สมัครบัญชีผู้ใช้ไม่สำเร็จ
+          schema:
+            $ref: '#/definitions/handlers.Res'
+      summary: สมัครบัญชีผู้ใช้
+      tags:
+      - Account
+  /api/removeacc:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ข้อมูลการลบบัญชี
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.AuthInfoV2'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ลบบัญชีสำเร็จ
+          schema:
+            $ref: '#/definitions/handlers.Res'
+        "400":
+          description: ลบบัญชีไม่สำเร็จ
+          schema:
+            $ref: '#/definitions/handlers.Res'
+      summary: ลบบัญชี
+      tags:
+      - Account
+  /api/taskprioritylist:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.TaskpriorityInfo'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Res'
+      summary: เรียกข้อมูลลำดับความสำคัญ
+      tags:
+      - GetMethods
+  /api/tasks:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.TasksInfo'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Res'
+      summary: เรียกข้อมูลงานทั้งหมด
+      tags:
+      - GetMethods
+  /api/tasks/{taskID}:
+    get:
+      parameters:
+      - description: Task ID
+        in: path
+        name: taskID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.TasksInfo'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Res'
+        "404":
+          description: Not Found
+          schema:
+            type: Not
+      summary: เรียกข้อมูลจากหมายเลขงาน
+      tags:
+      - GetMethods
+  /api/tasktypelist:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.TasktypeInfo'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Res'
+      summary: เรียกข้อมูลประเภทงานที่มี
+      tags:
+      - GetMethods
+swagger: "2.0"

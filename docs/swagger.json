@@ -1,0 +1,828 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API สำหรับแอปพลิเคชันจัดสรรงานบุคลากรแม่บ้านและภารโรง",
+        "title": "Backend API CareCrew",
+        "contact": {
+            "name": "Thun Saen",
+            "email": "biz.thunsaen@gmail.com"
+        }
+    },
+    "host": "api.lcadv.online",
+    "basePath": "/",
+    "paths": {
+        "/api/gettaskevidence/{taskID}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "GetMethods"
+                ],
+                "summary": "เรียกข้อมูลที่ผู้ใช้ส่งงานมา",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Task ID",
+                        "name": "taskID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.TaskEvidenceInfo"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/greport": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "GetMethods"
+                ],
+                "summary": "เรียกข้อมูลการแจ้งรายงาน",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.ReportInfo"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/loginv2": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Account"
+                ],
+                "summary": "ล็อคอินเวอร์ชัน 2 (ส่ง Token สำหรับ FCM)",
+                "parameters": [
+                    {
+                        "description": "ข้อมูลการเข้าสู่ระบบ",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handlers.AuthInfoV2"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "เข้าสู่ระบบสำเร็จ",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Authv2Res"
+                        }
+                    },
+                    "400": {
+                        "description": "เข้าสู่ระบบไม่สำเร็จ",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/lrubTasks": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "GetMethods"
+                ],
+                "summary": "เรียกข้อมูลว่างานนั้นมีคนรับไปกี่คนและมีใครบ้าง",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.LrubTasksCountInfo"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/lrubTasksv2": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PostMethods"
+                ],
+                "summary": "เรียกข้อมูลว่างานนั้นมีคนรับไปกี่คนและมีใครบ้าง",
+                "parameters": [
+                    {
+                        "description": "ข้อมูลการเรียกข้อมูลว่างานนั้นมีคนรับไปกี่คนและมีใครบ้าง",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handlers.LrubTasksCountvTwo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.LrubTasksCountInfo"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/perlrubTasks": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "GetMethods"
+                ],
+                "summary": "ผู้ใช้งานรับงานไหนไปแล้วบ้าง",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.PersonnelLrubTaskInfo"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/personnels": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "GetMethods"
+                ],
+                "summary": "เรียกข้อมูลผู้ใช้งานทั้งหมด",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.PersonnelsInfo"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/personnels/{personnelID}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "GetMethods"
+                ],
+                "summary": "เรียกข้อมูลจากหมายเลขผู้ใช้งาน",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Personnel ID",
+                        "name": "personnelID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.PersonnelsInfo"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/api/persubmittasksbor/{personnelID}/{taskID}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "GetMethods"
+                ],
+                "summary": "ผู้ใช้คนนี้ส่งงานนี้ยัง",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Personnel ID",
+                        "name": "personnelID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Task ID",
+                        "name": "taskID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.SubmitTaskWithID"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/register": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Account"
+                ],
+                "summary": "สมัครบัญชีผู้ใช้",
+                "parameters": [
+                    {
+                        "description": "ข้อมูลการสมัครบัญชีผู้ใช้",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/orther.RegisterUserInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "สมัครบัญชีผู้ใช้สำเร็จ",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.RegisterRes"
+                        }
+                    },
+                    "400": {
+                        "description": "สมัครบัญชีผู้ใช้ไม่สำเร็จ",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/removeacc": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Account"
+                ],
+                "summary": "ลบบัญชี",
+                "parameters": [
+                    {
+                        "description": "ข้อมูลการลบบัญชี",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handlers.AuthInfoV2"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "ลบบัญชีสำเร็จ",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    },
+                    "400": {
+                        "description": "ลบบัญชีไม่สำเร็จ",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/taskprioritylist": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "GetMethods"
+                ],
+                "summary": "เรียกข้อมูลลำดับความสำคัญ",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.TaskpriorityInfo"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/tasks": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "GetMethods"
+                ],
+                "summary": "เรียกข้อมูลงานทั้งหมด",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.TasksInfo"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/tasks/{taskID}": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "GetMethods"
+                ],
+                "summary": "เรียกข้อมูลจากหมายเลขงาน",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Task ID",
+                        "name": "taskID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.TasksInfo"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "Not"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/tasktypelist": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "GetMethods"
+                ],
+                "summary": "เรียกข้อมูลประเภทงานที่มี",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.TasktypeInfo"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "handlers.AuthInfoV2": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "personnel_id": {
+                    "type": "integer"
+                },
+                "token": {
+                    "type": "string"
+                }
+            }
+        },
+        "handlers.Authv2Res": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "personnel_id": {
+                    "type": "integer"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "handlers.LrubTasksCountvTwo": {
+            "type": "object",
+            "properties": {
+                "task_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "handlers.RegisterRes": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "personnel_id": {
+                    "type": "integer"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "handlers.Res": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "models.LrubTasksCountInfo": {
+            "type": "object",
+            "properties": {
+                "personnel_count": {
+                    "description": "Personnels",
+                    "type": "integer"
+                },
+                "personnel_ids": {
+                    "description": "Personnels",
+                    "type": "string"
+                },
+                "personnel_name": {
+                    "description": "Personnels",
+                    "type": "string"
+                },
+                "task_id": {
+                    "description": "Tasks_assignment",
+                    "type": "integer"
+                }
+            }
+        },
+        "models.PersonnelLrubTaskInfo": {
+            "type": "object",
+            "properties": {
+                "personnel_id": {
+                    "type": "integer"
+                },
+                "task_id": {
+                    "description": "task_id รวมกันเป็นสตริง เช่น \"1,3,5\"",
+                    "type": "string"
+                }
+            }
+        },
+        "models.PersonnelsInfo": {
+            "type": "object",
+            "properties": {
+                "first_name": {
+                    "description": "Personnels",
+                    "type": "string"
+                },
+                "last_name": {
+                    "description": "Personnels",
+                    "type": "string"
+                },
+                "personnel_id": {
+                    "description": "Personnels",
+                    "type": "integer"
+                },
+                "phone": {
+                    "description": "Personnels",
+                    "type": "string"
+                },
+                "role_name": {
+                    "description": "Role_types",
+                    "type": "string"
+                }
+            }
+        },
+        "models.ReportInfo": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "description": "Reports",
+                    "type": "string"
+                },
+                "detail": {
+                    "description": "Reports",
+                    "type": "string"
+                },
+                "file": {
+                    "description": "Reports",
+                    "type": "string"
+                },
+                "location": {
+                    "description": "Reports",
+                    "type": "string"
+                },
+                "personnel_id": {
+                    "description": "Reports",
+                    "type": "integer"
+                },
+                "report_id": {
+                    "description": "Reports",
+                    "type": "integer"
+                },
+                "title": {
+                    "description": "Reports",
+                    "type": "string"
+                }
+            }
+        },
+        "models.SubmitTaskWithID": {
+            "type": "object",
+            "properties": {
+                "personnel_id": {
+                    "type": "integer"
+                },
+                "submit": {
+                    "type": "boolean"
+                },
+                "submit_at": {
+                    "type": "string"
+                },
+                "task_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.TaskEvidenceInfo": {
+            "type": "object",
+            "properties": {
+                "assigned_by": {
+                    "description": "Personnels",
+                    "type": "string"
+                },
+                "assignment_id": {
+                    "description": "Tasks_assignment",
+                    "type": "integer"
+                },
+                "detail": {
+                    "description": "Tasks_detail",
+                    "type": "string"
+                },
+                "files": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "task_id": {
+                    "description": "Tasks_assignment",
+                    "type": "integer"
+                },
+                "title": {
+                    "description": "Tasks_detail",
+                    "type": "string"
+                },
+                "uploaded_at": {
+                    "description": "Tasks_attachments",
+                    "type": "string"
+                }
+            }
+        },
+        "models.TaskpriorityInfo": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "Priority_types",
+                    "type": "string"
+                },
+                "priority_type_id": {
+                    "description": "Priority_types",
+                    "type": "integer"
+                }
+            }
+        },
+        "models.TasksInfo": {
+            "type": "object",
+            "properties": {
+                "assigned_by": {
+                    "description": "Personnels",
+                    "type": "string"
+                },
+                "created_at": {
+                    "description": "Tasks",
+                    "type": "string"
+                },
+                "detail": {
+                    "description": "Tasks_detail",
+                    "type": "string"
+                },
+                "location": {
+                    "description": "Tasks_detail",
+                    "type": "string"
+                },
+                "people_needed": {
+                    "description": "Tasks_detail",
+                    "type": "integer"
+                },
+                "priority_name": {
+                    "description": "Priority_type",
+                    "type": "string"
+                },
+                "status": {
+                    "description": "Status_types",
+                    "type": "string"
+                },
+                "task_id": {
+                    "description": "Tasks",
+                    "type": "integer"
+                },
+                "title": {
+                    "description": "Tasks_detail",
+                    "type": "string"
+                },
+                "type_name": {
+                    "description": "Task_types",
+                    "type": "string"
+                },
+                "updated_at": {
+                    "description": "Tasks",
+                    "type": "string"
+                }
+            }
+        },
+        "models.TasktypeInfo": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "description": "Tasks_detail",
+                    "type": "string"
+                },
+                "task_type_id": {
+                    "description": "Tasks_detail",
+                    "type": "integer"
+                }
+            }
+        },
+        "orther.RegisterUserInfo": {
+            "type": "object",
+            "properties": {
+                "first_name": {
+                    "description": "ersonnels",
+                    "type": "string"
+                },
+                "last_name": {
+                    "description": "Personnels",
+                    "type": "string"
+                },
+                "password": {
+                    "description": "User",
+                    "type": "string"
+                },
+                "phone": {
+                    "description": "Personnels",
+                    "type": "string"
+                },
+                "role_type_id": {
+                    "description": "Role_types",
+                    "type": "integer"
+                }
+            }
+        }
+    }
+}

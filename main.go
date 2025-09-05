@@ -6,10 +6,18 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/swagger"
 	"github.com/project/carecrew/config"
+	_ "github.com/project/carecrew/docs"
 	"github.com/project/carecrew/handlers"
 )
 
+// @title Backend API CareCrew
+// @description API สำหรับแอปพลิเคชันจัดสรรงานบุคลากรแม่บ้านและภารโรง
+// @contact.name Thun Saen
+// @contact.email biz.thunsaen@gmail.com
+// @host api.lcadv.online
+// @BasePath /
 func main() {
 
 	limitfilesize := 50 //หน่อยเป็น M
@@ -33,6 +41,8 @@ func main() {
 	} else {
 		log.Print("[System] ปิดการใช้งาน STATIC FILE")
 	}
+
+	app.Get("/swagger/*", swagger.HandlerDefault)
 
 	//Get Methods
 	app.Get("/api/personnels", handlers.GetPersonnelsInfo)                               // เรียกข้อมูลผู้ใช้ทั้งหมด

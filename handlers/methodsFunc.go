@@ -18,6 +18,11 @@ import (
 	"github.com/project/carecrew/orther"
 )
 
+type Res struct { //สำหรับ Swagger
+	Success bool   `json:"success"`
+	Message string `json:"message"`
+}
+
 var Name = "CareCrew Backend API"
 var Versions = "1.96"
 var Last_Update = "09-03-25"
@@ -33,6 +38,13 @@ func ApiInfo(c *fiber.Ctx) error {
 }
 
 // เรียกข้อมูลผู้ใช้ทั้งหมด
+// GetPersonnelsInfo godoc
+// @Summary เรียกข้อมูลผู้ใช้งานทั้งหมด
+// @Tags GetMethods
+// @Produce json
+// @Success 200 {array} models.PersonnelsInfo
+// @Failure 400 {object} Res
+// @Router /api/personnels [get]
 func GetPersonnelsInfo(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 
@@ -49,6 +61,15 @@ func GetPersonnelsInfo(c *fiber.Ctx) error {
 }
 
 // เรียกข้อมูลผู้ใช้จาก ID
+// GetPersonnelsInfoWithID godoc
+// @Summary เรียกข้อมูลจากหมายเลขผู้ใช้งาน
+// @Tags GetMethods
+// @Produce json
+// @Success 200 {object} models.PersonnelsInfo
+// @Failure 400 {object} Res
+// @Failure 404 "Not Found"
+// @Param personnelID path int true "Personnel ID"
+// @Router /api/personnels/{personnelID} [get]
 func GetPersonnelsInfoWithID(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 	id, err := strconv.Atoi(c.Params("personnelID"))
@@ -70,6 +91,13 @@ func GetPersonnelsInfoWithID(c *fiber.Ctx) error {
 }
 
 // เรียกข้อมูลงานทั้งหมด
+// GetTasks godoc
+// @Summary เรียกข้อมูลงานทั้งหมด
+// @Tags GetMethods
+// @Produce json
+// @Success 200 {array} models.TasksInfo
+// @Failure 400 {object} Res
+// @Router /api/tasks [get]
 func GetTasks(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 	data, err := models.GetTasks(config.DB)
@@ -85,6 +113,15 @@ func GetTasks(c *fiber.Ctx) error {
 }
 
 // เรียกข้อมูลงานจาก ID
+// GetTasksWithID godoc
+// @Summary เรียกข้อมูลจากหมายเลขงาน
+// @Tags GetMethods
+// @Produce json
+// @Success 200 {object} models.TasksInfo
+// @Failure 400 {object} Res
+// @Failure 404 Not Found
+// @Param taskID path int true "Task ID"
+// @Router /api/tasks/{taskID} [get]
 func GetTasksWithID(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 	id, err := strconv.Atoi(c.Params("taskID"))
@@ -106,6 +143,13 @@ func GetTasksWithID(c *fiber.Ctx) error {
 }
 
 // เรียกข้อมูลการแจ้งรายงาน
+// GetReport godoc
+// @Summary เรียกข้อมูลการแจ้งรายงาน
+// @Tags GetMethods
+// @Produce json
+// @Success 200 {array} models.ReportInfo
+// @Failure 400 {object} Res
+// @Router /api/greport [get]
 func GetReport(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 	data, err := models.GetReport(config.DB)
@@ -121,6 +165,13 @@ func GetReport(c *fiber.Ctx) error {
 }
 
 // เรียกข้อมูลว่างานนั้นมีคนรับไปกี่คนและมีใครบ้าง
+// GetlrubTasksCount godoc
+// @Summary เรียกข้อมูลว่างานนั้นมีคนรับไปกี่คนและมีใครบ้าง
+// @Tags GetMethods
+// @Produce json
+// @Success 200 {array} models.LrubTasksCountInfo
+// @Failure 400 {object} Res
+// @Router /api/lrubTasks [get]
 func GetlrubTasksCount(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 	data, err := models.LrubTasksCount(config.DB)
@@ -136,6 +187,13 @@ func GetlrubTasksCount(c *fiber.Ctx) error {
 }
 
 // ผู้ใช้งานรับงานไหนไปแล้วบ้าง
+// GerperlrubTask godoc
+// @Summary ผู้ใช้งานรับงานไหนไปแล้วบ้าง
+// @Tags GetMethods
+// @Produce json
+// @Success 200 {array} models.PersonnelLrubTaskInfo
+// @Failure 400 {object} Res
+// @Router /api/perlrubTasks [get]
 func GerperlrubTask(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 	data, err := models.PersonnelLrubTask(config.DB)
@@ -151,6 +209,15 @@ func GerperlrubTask(c *fiber.Ctx) error {
 }
 
 // ผู้ใช้คนนี้ส่งงานนี้ยัง?
+// GetSumbitTaskWithID godoc
+// @Summary ผู้ใช้คนนี้ส่งงานนี้ยัง
+// @Tags GetMethods
+// @Produce json
+// @Success 200 {object} models.SubmitTaskWithID
+// @Failure 400 {object} Res
+// @Param personnelID path int true "Personnel ID"
+// @Param taskID path int true "Task ID"
+// @Router /api/persubmittasksbor/{personnelID}/{taskID} [get]
 func GetSumbitTaskWithID(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 	personnel_id, err := strconv.Atoi(c.Params("personnelID"))
@@ -180,6 +247,13 @@ func GetSumbitTaskWithID(c *fiber.Ctx) error {
 }
 
 // เรียกข้อมูลประเภทงานที่มี
+// GetTaskTypeList godoc
+// @Summary เรียกข้อมูลประเภทงานที่มี
+// @Tags GetMethods
+// @Produce json
+// @Success 200 {array} models.TasktypeInfo
+// @Failure 400 {object} Res
+// @Router /api/tasktypelist [get]
 func GetTaskTypeList(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 	data, err := models.Get_Task_Type_Info(config.DB)
@@ -195,6 +269,13 @@ func GetTaskTypeList(c *fiber.Ctx) error {
 }
 
 // เรียกข้อมูลลำดับความสำคัญ
+// GetTaskPriorityList godoc
+// @Summary เรียกข้อมูลลำดับความสำคัญ
+// @Tags GetMethods
+// @Produce json
+// @Success 200 {array} models.TaskpriorityInfo
+// @Failure 400 {object} Res
+// @Router /api/taskprioritylist [get]
 func GetTaskPriorityList(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 	data, err := models.Get_Task_Priority_Info(config.DB)
@@ -210,6 +291,14 @@ func GetTaskPriorityList(c *fiber.Ctx) error {
 }
 
 // เรียกข้อมูลที่ผู้ใช้ส่งงานมา
+// GetTaskEvidence godoc
+// @Summary เรียกข้อมูลที่ผู้ใช้ส่งงานมา
+// @Tags GetMethods
+// @Produce json
+// @Success 200 {object} models.TaskEvidenceInfo
+// @Failure 400 {object} Res
+// @Param taskID path int true "Task ID"
+// @Router /api/gettaskevidence/{taskID} [get]
 func GetTaskEvidence(c *fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("taskID"))
 	data, err := models.GetTaskEvidence(config.DB, id)
@@ -261,15 +350,32 @@ func Auth(c *fiber.Ctx) error {
 	}
 }
 
+type AuthInfoV2 struct {
+	PersonnelID int    `json:"personnel_id"`
+	Password    string `json:"password"`
+	Token       string `json:"token"`
+}
+type Authv2Res struct {
+	Success     bool   `json:"success"`
+	Message     string `json:"message"`
+	PersonnelID int    `json:"personnel_id"`
+	Role        string `json:"role"`
+}
+
 // ล็อคอิน V2 (ส่ง Token สำหรับใช้ FCM ด้วย)
+// Authv2 godoc
+// @Summary ล็อคอินเวอร์ชัน 2 (ส่ง Token สำหรับ FCM)
+// @Tags Account
+// @Accept json
+// @Produce json
+// @Param request body AuthInfoV2 true "ข้อมูลการเข้าสู่ระบบ"
+// @Success 200 {object} Authv2Res "เข้าสู่ระบบสำเร็จ"
+// @Failure 400 {object} Res "เข้าสู่ระบบไม่สำเร็จ"
+// @Router /api/loginv2 [post]
 func Authv2(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 
-	var authInfo struct {
-		PersonnelID int    `json:"personnel_id"`
-		Password    string `json:"password"`
-		Token       string `json:"token"`
-	}
+	var authInfo AuthInfoV2
 	err := c.BodyParser(&authInfo)
 	if err != nil {
 		log.Print("[Error] รูปแบบข้อมูลการเข้าสู่ระบบไม่ถูกต้อง")
@@ -289,17 +395,32 @@ func Authv2(c *fiber.Ctx) error {
 			})
 		} else {
 			log.Print("[System] สามาชิกหมายเลข: ", data.PersonnelID, " เข้าสู่ระบบ")
-			return c.JSON(fiber.Map{
-				"success":      true,
-				"message":      "เข้าสู่ระบบสำเร็จ",
-				"personnel_id": data.PersonnelID,
-				"role":         data.Role,
+			return c.JSON(Authv2Res{
+				Success:     true,
+				Message:     "เข้าสู่ระบบสำเร็จ",
+				PersonnelID: data.PersonnelID,
+				Role:        data.Role,
 			})
 		}
 	}
 }
 
-// สมัคร
+type RegisterRes struct {
+	Success     bool   `json:"success"`
+	Message     string `json:"message"`
+	PersonnelID int    `json:"personnel_id"`
+}
+
+// สมัครบัญชีผู้ใช้
+// Register godoc
+// @Summary สมัครบัญชีผู้ใช้
+// @Tags Account
+// @Accept json
+// @Produce json
+// @Param request body orther.RegisterUserInfo true "ข้อมูลการสมัครบัญชีผู้ใช้"
+// @Success 200 {object} RegisterRes "สมัครบัญชีผู้ใช้สำเร็จ"
+// @Failure 400 {object} Res "สมัครบัญชีผู้ใช้ไม่สำเร็จ"
+// @Router /api/register [post]
 func Register(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 
@@ -324,14 +445,23 @@ func Register(c *fiber.Ctx) error {
 		}
 	}
 	log.Print("[System] สมัครสามาชิกหมายเลข: ", personnelID)
-	return c.JSON(fiber.Map{
-		"success":      true,
-		"message":      "สมัครสมาชิกสำเร็จ",
-		"personnel_id": personnelID,
+	return c.JSON(RegisterRes{
+		Success:     true,
+		Message:     "สมัครสมาชิกสำเร็จ",
+		PersonnelID: personnelID,
 	})
 }
 
 // ลบบัญชี
+// Removeacc godoc
+// @Summary ลบบัญชี
+// @Tags Account
+// @Accept json
+// @Produce json
+// @Param request body AuthInfoV2 true "ข้อมูลการลบบัญชี"
+// @Success 200 {object} Res "ลบบัญชีสำเร็จ"
+// @Failure 400 {object} Res "ลบบัญชีไม่สำเร็จ"
+// @Router /api/removeacc [post]
 func Removeacc(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 
@@ -361,13 +491,24 @@ func Removeacc(c *fiber.Ctx) error {
 	})
 }
 
-// เรียกข้อมูลว่างานนั้นมีคนรับไปกี่คนและมีใครบ้าง แบบ Post
+type LrubTasksCountvTwo struct {
+	TaskId int `json:"task_id"`
+}
+
+// เรียกข้อมูลว่างานนั้นมีคนรับไปกี่คนและมีใครบ้าง
+// GetlrubTasksCountv2 godoc
+// @Summary เรียกข้อมูลว่างานนั้นมีคนรับไปกี่คนและมีใครบ้าง
+// @Tags PostMethods
+// @Accept json
+// @Produce json
+// @Param request body LrubTasksCountvTwo true "ข้อมูลการเรียกข้อมูลว่างานนั้นมีคนรับไปกี่คนและมีใครบ้าง"
+// @Success 200 {object} models.LrubTasksCountInfo
+// @Failure 400 {object} Res
+// @Router /api/lrubTasksv2 [post]
 func GetlrubTasksCountv2(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 
-	var lrubtaskscountvtwo struct {
-		TaskId int `json:"task_id"`
-	}
+	var lrubtaskscountvtwo LrubTasksCountvTwo
 
 	err := c.BodyParser(&lrubtaskscountvtwo)
 	if err != nil {
@@ -395,7 +536,7 @@ func GetlrubTasksCountv2(c *fiber.Ctx) error {
 func Report(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 
-	var greportInfo models.GuestReportInfo
+	var greportInfo models.ReportInfo
 
 	err := c.BodyParser(&greportInfo)
 	if err != nil {
@@ -414,13 +555,13 @@ func Report(c *fiber.Ctx) error {
 			})
 		}
 	}
-	log.Print("พบการแจ้งรายงานจาก: ", greportInfo.Email)
+	log.Print("พบการแจ้งรายงานจาก: ", greportInfo.PersonnelID)
 	return c.JSON(fiber.Map{
-		"success":  true,
-		"message":  "ส่งรายงานสำเร็จแล้ว",
-		"Email":    greportInfo.Email,
-		"Detail":   greportInfo.Detail,
-		"Location": greportInfo.Location,
+		"success":     true,
+		"message":     "ส่งรายงานสำเร็จแล้ว",
+		"PersonnelID": greportInfo.PersonnelID,
+		"Detail":      greportInfo.Detail,
+		"Location":    greportInfo.Location,
 	})
 }
 
@@ -429,7 +570,7 @@ func Reportv2(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 
 	title := c.FormValue("title")
-	email := c.FormValue("email")
+	personnel_id := c.FormValue("personnel_id")
 	detail := c.FormValue("detail")
 	location := c.FormValue("location")
 
@@ -454,6 +595,14 @@ func Reportv2(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
 			"message": "กรุณาระบุข้อมูลให้ครบถ้วน",
+		})
+	}
+
+	personnelid, err := strconv.Atoi(personnel_id)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"success": false,
+			"message": "รูปแบบของ PersonnelID ไม่ถูกต้อง",
 		})
 	}
 
@@ -505,12 +654,12 @@ func Reportv2(c *fiber.Ctx) error {
 		savedPaths = append(savedPaths, "/imgs/reports/"+filename)
 	}
 
-	greportInfo := &models.GuestReportInfo{
-		Title:    title,
-		Email:    email,
-		Detail:   detail,
-		Location: location,
-		File:     strings.Join(savedPaths, ","),
+	greportInfo := &models.ReportInfo{
+		Title:       title,
+		PersonnelID: personnelid,
+		Detail:      detail,
+		Location:    location,
+		File:        strings.Join(savedPaths, ","),
 	}
 
 	err = models.GuestReport(config.DB, greportInfo)
@@ -530,13 +679,13 @@ func Reportv2(c *fiber.Ctx) error {
 
 	log.Print("[System] พบการแจ้งปัญหาใหม่")
 	return c.JSON(fiber.Map{
-		"success":  true,
-		"message":  "ส่งรายงานสำเร็จแล้ว",
-		"Title":    title,
-		"Email":    email,
-		"Detail":   detail,
-		"Location": location,
-		"Files":    savedPaths,
+		"success":     true,
+		"message":     "ส่งรายงานสำเร็จแล้ว",
+		"Title":       title,
+		"PersonnelID": personnelid,
+		"Detail":      detail,
+		"Location":    location,
+		"Files":       savedPaths,
 	})
 }
 
