@@ -61,7 +61,7 @@ func GetPersonnelsInfo(c *fiber.Ctx) error {
 		log.Print("[Error] เกิดข้อผิดพลาดในการเรียกข้อมูลผู้ใช้งาน")
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
-			"message": err.Error(),
+			"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
 		})
 	}
 	log.Print("[System] พบการเรียกข้อมูลผู้ใช้งาน")
@@ -85,7 +85,7 @@ func GetPersonnelsInfoWithID(c *fiber.Ctx) error {
 		log.Print("[Error] รูปแบบข้อมูลขอเรียกข้อมูลผู้ใช้งานไม่ถูกต้อง")
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
-			"message": err.Error(),
+			"message": "รูปแบบข้อมูลขอเรียกข้อมูลผู้ใช้งานไม่ถูกต้อง",
 		})
 	}
 
@@ -113,7 +113,7 @@ func GetTasks(c *fiber.Ctx) error {
 		log.Print("[Error] เกิดข้อผิดพลาดในการเรียกข้อมูลงาน")
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
-			"message": err.Error(),
+			"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
 		})
 	}
 	log.Print("[System] พบการเรียกข้อมูลงาน")
@@ -137,7 +137,7 @@ func GetTasksWithID(c *fiber.Ctx) error {
 		log.Print("[Error] รูปแบบข้อมูลขอเรียกข้อมูลงานไม่ถูกต้อง")
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
-			"message": err.Error(),
+			"message": "รูปแบบข้อมูลขอเรียกข้อมูลงานไม่ถูกต้อง",
 		})
 	}
 
@@ -165,7 +165,7 @@ func GetReport(c *fiber.Ctx) error {
 		log.Print("[Error] เกิดข้อผิดพลาดในการเรียกข้อมูลการแจ้งรายงาน")
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
-			"message": err.Error(),
+			"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
 		})
 	}
 	log.Print("[System] พบการเรียกข้อมูลการแจ้งรายงาน")
@@ -187,7 +187,7 @@ func GetlrubTasksCount(c *fiber.Ctx) error {
 		log.Print("[Error] เกิดข้อผิดพลาดในการเรียกข้อมูลรับงาน")
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
-			"message": err.Error(),
+			"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
 		})
 	}
 	log.Print("[System] พบการเรียกข้อมูลจำนวนคนที่รับงาน")
@@ -209,7 +209,7 @@ func GerperlrubTask(c *fiber.Ctx) error {
 		log.Print("[Error] เกิดข้อผิดพลาดในการเรียกข้อมูลรับงาน")
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
-			"message": err.Error(),
+			"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
 		})
 	}
 	log.Print("[System] พบการเรียกข้อมูลรับงาน")
@@ -233,7 +233,7 @@ func GetSumbitTaskWithID(c *fiber.Ctx) error {
 		log.Print("[Error] รูปแบบข้อมูลขอเรียกข้อมูลงานไม่ถูกต้อง")
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
-			"message": err.Error(),
+			"message": "รูปแบบข้อมูลขอเรียกข้อมูลงานไม่ถูกต้อง",
 		})
 	}
 	task_id, err := strconv.Atoi(c.Params("taskID"))
@@ -241,7 +241,7 @@ func GetSumbitTaskWithID(c *fiber.Ctx) error {
 		log.Print("[Error] รูปแบบข้อมูลขอเรียกข้อมูลงานไม่ถูกต้อง")
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
-			"message": err.Error(),
+			"message": "รูปแบบข้อมูลขอเรียกข้อมูลงานไม่ถูกต้อง",
 		})
 	}
 
@@ -269,7 +269,7 @@ func GetTaskTypeList(c *fiber.Ctx) error {
 		log.Print("[Error] เกิดข้อผิดพลาดในการเรียกข้อมูลประเภทงาน")
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
-			"message": err.Error(),
+			"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
 		})
 	}
 	log.Print("[System] พบการเรียกข้อมูลประเภทงาน")
@@ -291,7 +291,7 @@ func GetTaskPriorityList(c *fiber.Ctx) error {
 		log.Print("[Error] เกิดข้อผิดพลาดในการเรียกข้อมูลลำดับความสำคัญ")
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
-			"message": err.Error(),
+			"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
 		})
 	}
 	log.Print("[System] พบการเรียกข้อมูลลำดับความสำคัญ")
@@ -314,7 +314,7 @@ func GetTaskEvidence(c *fiber.Ctx) error {
 		log.Print("[Error] เกิดข้อผิดพลาดในการเรียกข้อมูลส่งงานของผู้ใช้")
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
-			"message": err.Error(),
+			"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
 		})
 	}
 	log.Print("[System] พบการเรียกข้อมูลส่งงานของผู้ใช้")
@@ -399,7 +399,7 @@ func Authv2(c *fiber.Ctx) error {
 			// return c.Status(fiber.StatusBadRequest).SendString(err.Error())
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"success": false,
-				"message": err.Error(),
+				"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
 			})
 		} else {
 			log.Print("[System] สามาชิกหมายเลข: ", data.PersonnelID, " เข้าสู่ระบบ")
@@ -488,7 +488,7 @@ func Removeacc(c *fiber.Ctx) error {
 			log.Print("[Error] เกิดข้อผิดพลาดในการลบบัญชีผู้ใช้")
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"success": false,
-				"message": err.Error(),
+				"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
 			})
 		}
 	}
@@ -531,7 +531,7 @@ func GetlrubTasksCountv2(c *fiber.Ctx) error {
 			log.Print("[Error] เกิดข้อผิดพลาดในการเรียกข้อมูลว่างานนั้นมีคนรับไปกี่คนและมีใครบ้าง")
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"success": false,
-				"message": err.Error(),
+				"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
 			})
 		}
 
@@ -618,7 +618,7 @@ func Reportv2(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
-			"message": err.Error(),
+			"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
 		})
 	}
 
@@ -670,7 +670,7 @@ func Reportv2(c *fiber.Ctx) error {
 		if !allowedTypes[fileType] {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"success": false,
-				"message": fmt.Sprintf("พลไฟล์ที่มีชนิดไม่ถูกต้อง (%s)", fileType),
+				"message": fmt.Sprintf("พบไฟล์ที่มีชนิดไม่ถูกต้อง (%s)", fileType),
 			})
 		}
 
@@ -680,7 +680,7 @@ func Reportv2(c *fiber.Ctx) error {
 			log.Print("[Error] ไม่สามารถบันทึกไฟล์ได้")
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 				"success": false,
-				"message": err.Error(),
+				"message": "ไม่สามารถบันทึกไฟล์ได้",
 			})
 		}
 		savedPaths = append(savedPaths, "/imgs/reports/"+filename)
@@ -749,7 +749,7 @@ func Addtask(c *fiber.Ctx) error {
 			log.Print("[Error] เกิดข้อผิดพลาดในการเพิ่มงาน")
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"success": false,
-				"message": err.Error(),
+				"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
 			})
 		}
 	}
@@ -788,7 +788,7 @@ func Edittask(c *fiber.Ctx) error {
 			log.Print("[Error] เกิดข้อผิดพลาดในการแก้ไขงาน")
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"success": false,
-				"message": err.Error(),
+				"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
 			})
 		}
 	}
@@ -827,7 +827,7 @@ func Removetask(c *fiber.Ctx) error {
 			log.Print("[Error] เกิดข้อผิดพลาดในการลบงาน")
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"success": false,
-				"message": err.Error(),
+				"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
 			})
 		}
 	}
@@ -870,7 +870,7 @@ func TaskSuccess(c *fiber.Ctx) error {
 			log.Print("[Error] เกิดข้อผิดพลาดในการอนุมัติงาน")
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"success": false,
-				"message": err.Error(),
+				"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
 			})
 		}
 	}
@@ -908,7 +908,7 @@ func Lrubtask(c *fiber.Ctx) error {
 			log.Print("[Error] เกิดข้อผิดพลาดในการรับงาน")
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"success": false,
-				"message": err.Error(),
+				"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
 			})
 		}
 	}
@@ -945,7 +945,7 @@ func Yoklerk(c *fiber.Ctx) error {
 			log.Print("[Error] เกิดข้อผิดพลาดในการยกเลิกงาน")
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"success": false,
-				"message": err.Error(),
+				"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
 			})
 		}
 	}
@@ -992,7 +992,7 @@ func Songtask(c *fiber.Ctx) error {
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
-			"message": err.Error(),
+			"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
 		})
 	}
 
@@ -1035,7 +1035,7 @@ func Songtask(c *fiber.Ctx) error {
 			log.Print("[Error] ไม่สามารถบันทึกไฟล์ได้")
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 				"success": false,
-				"message": err.Error(),
+				"message": "ไม่สามารถบันทึกไฟล์ได้",
 			})
 		}
 		savedPaths = append(savedPaths, "/imgs/attachments/"+filename)
@@ -1057,7 +1057,7 @@ func Songtask(c *fiber.Ctx) error {
 
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
-			"message": err.Error(),
+			"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
 		})
 	}
 
@@ -1096,7 +1096,7 @@ func YokLerkSongTask(c *fiber.Ctx) error {
 			log.Print("[Error] เกิดข้อผิดพลาดในการยกเลิกการส่งงาน")
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"success": false,
-				"message": err.Error(),
+				"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
 			})
 		}
 
