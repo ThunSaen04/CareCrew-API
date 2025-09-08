@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/jmoiron/sqlx"
+	"github.com/project/carecrew/orther"
 )
 
 type EditTaskInfo struct {
@@ -144,5 +145,14 @@ func EditTask(db *sqlx.DB, edittaskinfo *EditTaskInfo) error {
 	if err != nil {
 		return err
 	}
+
+	sendinfo := orther.SendNotiInfo{
+		Task_id: edittaskinfo.Task_id,
+		Title:   "งาน " + edittaskinfo.Title,
+		Body:    "มีการแก้ไขรายละเอียดงาน",
+	}
+
+	orther.SendNotiSuccessToPerInTask(db, &sendinfo)
+
 	return nil
 }

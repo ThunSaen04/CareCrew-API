@@ -98,7 +98,7 @@ func SendNotiSuccessToPerInTask(db *sqlx.DB, sendnotiinfo *SendNotiInfo) error {
 	}
 	msg := &messaging.MulticastMessage{
 		Notification: &messaging.Notification{
-			Title: "งาน " + sendnotiinfo.Title + " สิ้นสุดแล้ว!!",
+			Title: sendnotiinfo.Title,
 			Body:  sendnotiinfo.Body,
 		},
 		Tokens: tokens,

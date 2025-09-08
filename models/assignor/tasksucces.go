@@ -56,7 +56,7 @@ func TaskSuccess(db *sqlx.DB, taskID int) error {
 	}
 	sendinfo := orther.SendNotiInfo{
 		Task_id: taskID,
-		Title:   task.Title,
+		Title:   "งาน " + task.Title + " สิ้นสุดแล้ว!!",
 		Body:    "งานนี้สิ้นสุดเรียบร้อย",
 	}
 
