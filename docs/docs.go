@@ -515,6 +515,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/removereport": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Assignor"
+                ],
+                "summary": "ลบงาน",
+                "parameters": [
+                    {
+                        "description": "ข้อมูลการลบงาน",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/assignor.RemoveReportInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    }
+                }
+            }
+        },
         "/api/removetask": {
             "post": {
                 "consumes": [
@@ -982,6 +1021,14 @@ const docTemplate = `{
                 "title": {
                     "description": "Tasks_detail",
                     "type": "string"
+                }
+            }
+        },
+        "assignor.RemoveReportInfo": {
+            "type": "object",
+            "properties": {
+                "report_id": {
+                    "type": "integer"
                 }
             }
         },

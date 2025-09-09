@@ -48,6 +48,11 @@ definitions:
         description: Tasks_detail
         type: string
     type: object
+  assignor.RemoveReportInfo:
+    properties:
+      report_id:
+        type: integer
+    type: object
   assignor.RemoveTaskInfo:
     properties:
       task_id:
@@ -642,6 +647,31 @@ paths:
       summary: ลบบัญชี
       tags:
       - Account
+  /api/removereport:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ข้อมูลการลบงาน
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/assignor.RemoveReportInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Res'
+      summary: ลบงาน
+      tags:
+      - Assignor
   /api/removetask:
     post:
       consumes:
