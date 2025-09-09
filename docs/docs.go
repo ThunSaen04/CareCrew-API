@@ -526,10 +526,10 @@ const docTemplate = `{
                 "tags": [
                     "Assignor"
                 ],
-                "summary": "ลบงาน",
+                "summary": "ลบการแจ้งรายงาน",
                 "parameters": [
                     {
-                        "description": "ข้อมูลการลบงาน",
+                        "description": "ข้อมูลการลบการแจ้งรายงาน",
                         "name": "request",
                         "in": "body",
                         "required": true,

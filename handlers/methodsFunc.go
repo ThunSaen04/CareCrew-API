@@ -839,13 +839,13 @@ func Removetask(c *fiber.Ctx) error {
 	})
 }
 
-// ลบงาน
+// ลบการแจ้งรายงาน
 // Removereport godoc
-// @Summary ลบงาน
+// @Summary ลบการแจ้งรายงาน
 // @Tags Assignor
 // @Accept json
 // @Produce json
-// @Param request body assignor.RemoveReportInfo true "ข้อมูลการลบงาน"
+// @Param request body assignor.RemoveReportInfo true "ข้อมูลการลบการแจ้งรายงาน"
 // @Success 200 {object} Res
 // @Failure 400 {object} Res
 // @Router /api/removereport [post]

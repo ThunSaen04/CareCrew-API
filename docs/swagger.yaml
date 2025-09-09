@@ -652,7 +652,7 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: ข้อมูลการลบงาน
+      - description: ข้อมูลการลบการแจ้งรายงาน
         in: body
         name: request
         required: true
@@ -669,7 +669,7 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/handlers.Res'
-      summary: ลบงาน
+      summary: ลบการแจ้งรายงาน
       tags:
       - Assignor
   /api/removetask:
