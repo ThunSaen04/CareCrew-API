@@ -24,8 +24,8 @@ type Res struct { //สำหรับ Swagger
 }
 
 var Name = "CareCrew Backend API"
-var Versions = "0.2.0"
-var Last_Update = "09-06-25"
+var Versions = "0.2.1"
+var Last_Update = "09-09-25"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -836,6 +836,45 @@ func Removetask(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"success": true,
 		"message": "ลบงานสำเร็จแล้ว",
+	})
+}
+
+// ลบงาน
+// Removereport godoc
+// @Summary ลบงาน
+// @Tags Assignor
+// @Accept json
+// @Produce json
+// @Param request body assignor.RemoveReportInfo true "ข้อมูลการลบงาน"
+// @Success 200 {object} Res
+// @Failure 400 {object} Res
+// @Router /api/removereport [post]
+func Removereport(c *fiber.Ctx) error {
+	c.Set("Content-Type", "application/json; charset=utf-8")
+	var removereportinfo assignor.RemoveReportInfo
+
+	err := c.BodyParser(&removereportinfo)
+	if err != nil {
+		log.Print("[Error] รูปแบบข้อมูลการลบการแจ้งรายงานไม่ถูกต้อง")
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"success": false,
+			"message": "รูปแบบข้อมูลการลบการแจ้งรายงานไม่ถูกต้อง",
+		})
+	} else {
+		err = assignor.RemoveReport(config.DB, &removereportinfo)
+		if err != nil {
+			log.Print("[Error] เกิดข้อผิดพลาดในการลบการแจ้งรายงาน")
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+				"success": false,
+				"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
+			})
+		}
+	}
+
+	log.Print("[System] ลบการแจ้งรายงานหมายเลข: ", removereportinfo.Report_id, " สำเร็จ")
+	return c.JSON(fiber.Map{
+		"success": true,
+		"message": "ลบการแจ้งรายงานสำเร็จแล้ว",
 	})
 }
 

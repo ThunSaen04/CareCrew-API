@@ -70,6 +70,7 @@ func main() {
 	//ผู้มอบหมายงาน
 	app.Post("/api/addtask", handlers.Addtask)                        // เพิ่มงาน
 	app.Post("/api/removetask", handlers.Removetask)                  // ลบงาน
+	app.Post("/api/removereport", handlers.Removereport)              // ลบการแจ้งรายงาน
 	app.Post("/api/edittask", handlers.Edittask)                      // แก้ไขงาน
 	app.Get("/api/gettaskevidence/:taskID", handlers.GetTaskEvidence) // เรียกข้อมูลที่ผู้ใช้ส่งงานมา
 	//app.Post("/api/tasksuccescheck", nil)                             // โหลดข้อมูลที่ผู้ใช้ส่งเข้ามา สำหรับตรวจสอบงาน
