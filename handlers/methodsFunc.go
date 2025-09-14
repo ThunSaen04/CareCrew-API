@@ -554,7 +554,7 @@ func Report(c *fiber.Ctx) error {
 			"message": "รูปแบบข้อมูลการแจ้งรายงานไม่ถูกต้อง",
 		})
 	} else {
-		err = models.GuestReport(config.DB, &greportInfo)
+		err = models.Report(config.DB, &greportInfo)
 		if err != nil {
 			log.Print("[Error] เกิดข้อผิดพลาดในการแจ้งรายงาน")
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -694,7 +694,7 @@ func Reportv2(c *fiber.Ctx) error {
 		File:        strings.Join(savedPaths, ","),
 	}
 
-	err = models.GuestReport(config.DB, greportInfo)
+	err = models.Report(config.DB, greportInfo)
 	if err != nil {
 
 		for _, path := range savedPaths {

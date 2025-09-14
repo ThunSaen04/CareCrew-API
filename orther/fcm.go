@@ -61,7 +61,7 @@ func SendNotificationToAll(db *sqlx.DB, title, body string) error {
 	if err != nil {
 		return err
 	}
-	fmt.Println("Success:", resp.SuccessCount, "Failure:", resp.FailureCount)
+	log.Println("[System] ", "Success:", resp.SuccessCount, "Failure:", resp.FailureCount)
 
 	return nil
 }

@@ -58,30 +58,30 @@ func main() {
 
 	//Post Methods
 	//app.Post("/api/login", handlers.Auth)          // ล็อคอิน
-	app.Post("/api/loginv2", handlers.Authv2)      // ล็อคอินv2 ส่ง FCM Device Token มาด้วยด้วย
-	app.Post("/api/register", handlers.Register)   // สมัคร ปล.ใช้ได้เฉพาะผู้ดูแลระบบ ที่มีสิทธิในการสร้างผู้ใช้งาน
-	app.Post("/api/removeacc", handlers.Removeacc) // ลบบัญชีผู้ใช้งาน
+	app.Post("/api/loginv2", handlers.Authv2)      // ล็อคอินv2 ส่ง FCM Device Token มาด้วยด้วย..
+	app.Post("/api/register", handlers.Register)   // สมัคร ปล.ใช้ได้เฉพาะผู้ดูแลระบบ ที่มีสิทธิในการสร้างผู้ใช้งาน..
+	app.Post("/api/removeacc", handlers.Removeacc) // ลบบัญชีผู้ใช้งาน..
 
 	app.Post("/api/lrubTasksv2", handlers.GetlrubTasksCountv2) // เรียกข้อมูลว่างานนั้นมีคนรับไปกี่คนและมีใครบ้าง แบบ Post ระบบ task_id
 
 	//app.Post("/api/report", handlers.Report)     // รีพอร์ต
-	app.Post("/api/reportv2", handlers.Reportv2) // รีพอร์ต2 รับหลายรูป
+	app.Post("/api/reportv2", handlers.Reportv2) // รีพอร์ต2 รับหลายรูป..
 
 	//ผู้มอบหมายงาน
-	app.Post("/api/addtask", handlers.Addtask)                        // เพิ่มงาน
-	app.Post("/api/removetask", handlers.Removetask)                  // ลบงาน
-	app.Post("/api/removereport", handlers.Removereport)              // ลบการแจ้งรายงาน
-	app.Post("/api/edittask", handlers.Edittask)                      // แก้ไขงาน
+	app.Post("/api/addtask", handlers.Addtask)                        // เพิ่มงาน..
+	app.Post("/api/removetask", handlers.Removetask)                  // ลบงาน..
+	app.Post("/api/removereport", handlers.Removereport)              // ลบการแจ้งรายงาน..
+	app.Post("/api/edittask", handlers.Edittask)                      // แก้ไขงาน..
 	app.Get("/api/gettaskevidence/:taskID", handlers.GetTaskEvidence) // เรียกข้อมูลที่ผู้ใช้ส่งงานมา
 	//app.Post("/api/tasksuccescheck", nil)                             // โหลดข้อมูลที่ผู้ใช้ส่งเข้ามา สำหรับตรวจสอบงาน
-	app.Post("/api/tasksuccess", handlers.TaskSuccess) // การอนุมัติงาน(เสร็จสิ้นงาน)
+	app.Post("/api/tasksuccess", handlers.TaskSuccess) // การอนุมัติงาน(เสร็จสิ้นงาน)..
 	//app.Post("/api/loaddetailfromreport", nil)                        // โหลดข้อมูลงานจาก รีพอร์ต
 
 	//ผู้รับงาน
-	app.Post("/api/lrubtask", handlers.Lrubtask)               // รับงาน
-	app.Post("/api/yoklerktask", handlers.Yoklerk)             // ยกเลิกงาน
-	app.Post("/api/songtask", handlers.Songtask)               // ส่งงาน
-	app.Post("/api/yoklerksongtask", handlers.YokLerkSongTask) // ยกเลิกส่งงาน
+	app.Post("/api/lrubtask", handlers.Lrubtask)               // รับงาน..
+	app.Post("/api/yoklerktask", handlers.Yoklerk)             // ยกเลิกงาน..
+	app.Post("/api/songtask", handlers.Songtask)               // ส่งงาน..
+	app.Post("/api/yoklerksongtask", handlers.YokLerkSongTask) // ยกเลิกส่งงาน..
 
 	//FCM
 	//app.Post("/api/fcmsend", handlers.SendFCM)

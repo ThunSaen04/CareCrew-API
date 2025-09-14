@@ -38,20 +38,19 @@ func EditTask(db *sqlx.DB, edittaskinfo *EditTaskInfo) error {
 		return err
 	}
 
-	//ข้อมูลงาน
-	var taskinfo EditTaskInfo
-	query = `
+	if exists { //ถ้ามีงานจริง
+		//ข้อมูลงาน
+		var taskinfo EditTaskInfo
+		query = `
 		SELECT t.task_id, t.task_type_id, td.title, td.detail, td.location, t.priority_type_id, td.people_needed
 		FROM "Tasks" t
 		LEFT JOIN "Tasks_detail" td	ON t.task_id = td.task_id
 		WHERE t.task_id = $1
 	`
-	err = tranX.Get(&taskinfo, query, edittaskinfo.Task_id)
-	if err != nil {
-		return errors.New("เกิดข้อผิดพลาดในการเรียกข้อมูลงาน")
-	}
-
-	if exists { //ถ้ามีงานจริง
+		err = tranX.Get(&taskinfo, query, edittaskinfo.Task_id)
+		if err != nil {
+			return errors.New("เกิดข้อผิดพลาดในการเรียกข้อมูลงาน")
+		}
 
 		//ประเภทงาน
 		if edittaskinfo.Task_type_id != 0 && edittaskinfo.Task_type_id != taskinfo.Task_type_id {

@@ -14,7 +14,7 @@ type ReportInfo struct {
 	File        string `db:"file" json:"file"`                 //Reports
 }
 
-func GuestReport(db *sqlx.DB, greportInfo *ReportInfo) error {
+func Report(db *sqlx.DB, greportInfo *ReportInfo) error {
 
 	_, err := db.Exec(
 		`INSERT INTO "Reports" (title, personnel_id, detail, location, file, created_at)
