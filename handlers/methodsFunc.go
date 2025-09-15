@@ -24,8 +24,8 @@ type Res struct { //สำหรับ Swagger
 }
 
 var Name = "CareCrew Backend API"
-var Versions = "0.2.1"
-var Last_Update = "09-09-25"
+var Versions = "0.2.2"
+var Last_Update = "09-15-25"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -58,7 +58,7 @@ func GetPersonnelsInfo(c *fiber.Ctx) error {
 
 	data, err := models.GetPersonnelsInfo(config.DB)
 	if err != nil {
-		log.Print("[Error] เกิดข้อผิดพลาดในการเรียกข้อมูลผู้ใช้งาน")
+		log.Print(err)
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
 			"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
@@ -91,7 +91,7 @@ func GetPersonnelsInfoWithID(c *fiber.Ctx) error {
 
 	data, err := models.GetPersonnelsInfo_With_ID(config.DB, id)
 	if err != nil {
-		log.Print("[Error] เกิดข้อผิดพลาดในการเรียกข้อมูลผู้ใช้งานหมายเลข: ", id)
+		log.Print("[Error] เกิดข้อผิดพลาดในการเรียกข้อมูลผู้ใช้งานหมายเลข: ", id, " ", err)
 		return c.SendStatus(fiber.StatusNotFound)
 	}
 	log.Print("[System] พบการเรียกข้อมูลผู้ใช้งานหมายเลข: ", data.PersonnelID)
@@ -110,7 +110,7 @@ func GetTasks(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 	data, err := models.GetTasks(config.DB)
 	if err != nil {
-		log.Print("[Error] เกิดข้อผิดพลาดในการเรียกข้อมูลงาน")
+		log.Print(err)
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
 			"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
@@ -162,7 +162,7 @@ func GetReport(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 	data, err := models.GetReport(config.DB)
 	if err != nil {
-		log.Print("[Error] เกิดข้อผิดพลาดในการเรียกข้อมูลการแจ้งรายงาน")
+		log.Print(err)
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
 			"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
@@ -184,7 +184,7 @@ func GetlrubTasksCount(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 	data, err := models.LrubTasksCount(config.DB)
 	if err != nil {
-		log.Print("[Error] เกิดข้อผิดพลาดในการเรียกข้อมูลรับงาน")
+		log.Print(err)
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
 			"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
@@ -206,7 +206,7 @@ func GerperlrubTask(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 	data, err := models.PersonnelLrubTask(config.DB)
 	if err != nil {
-		log.Print("[Error] เกิดข้อผิดพลาดในการเรียกข้อมูลรับงาน")
+		log.Print(err)
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
 			"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
@@ -247,7 +247,7 @@ func GetSumbitTaskWithID(c *fiber.Ctx) error {
 
 	data, err := models.Get_Submit_Task_With_ID(config.DB, personnel_id, task_id)
 	if err != nil {
-		log.Print("[Error] เกิดข้อผิดพลาดในการเรียกข้อมูลการส่งงานของผูใช้: ", personnel_id, " (", task_id, ")")
+		log.Print("[Error] เกิดข้อผิดพลาดในการเรียกข้อมูลการส่งงานของผูใช้: ", personnel_id, " (", task_id, ")", " ", err)
 		return c.SendStatus(fiber.StatusNotFound)
 	}
 	log.Print("[System] พบการเรียกข้อมูลการส่งงานของผูใช้: ", personnel_id, " (", task_id, ")")
@@ -266,7 +266,7 @@ func GetTaskTypeList(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 	data, err := models.Get_Task_Type_Info(config.DB)
 	if err != nil {
-		log.Print("[Error] เกิดข้อผิดพลาดในการเรียกข้อมูลประเภทงาน")
+		log.Print(err)
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
 			"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
@@ -288,7 +288,7 @@ func GetTaskPriorityList(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 	data, err := models.Get_Task_Priority_Info(config.DB)
 	if err != nil {
-		log.Print("[Error] เกิดข้อผิดพลาดในการเรียกข้อมูลลำดับความสำคัญ")
+		log.Print(err)
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
 			"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
@@ -311,7 +311,7 @@ func GetTaskEvidence(c *fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("taskID"))
 	data, err := models.GetTaskEvidence(config.DB, id)
 	if err != nil {
-		log.Print("[Error] เกิดข้อผิดพลาดในการเรียกข้อมูลส่งงานของผู้ใช้")
+		log.Print(err)
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
 			"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
@@ -395,11 +395,11 @@ func Authv2(c *fiber.Ctx) error {
 	} else {
 		data, err := orther.AuthV2(config.DB, authInfo.PersonnelID, authInfo.Password, authInfo.Token)
 		if err != nil {
-			log.Print("[Error] เกิดข้อผิดพลาดในการเข้าสู่ระบบ")
+			log.Print(err)
 			// return c.Status(fiber.StatusBadRequest).SendString(err.Error())
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"success": false,
-				"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
+				"message": err.Error(),
 			})
 		} else {
 			log.Print("[System] สามาชิกหมายเลข: ", data.PersonnelID, " เข้าสู่ระบบ")
@@ -445,7 +445,7 @@ func Register(c *fiber.Ctx) error {
 	} else {
 		personnelID, err = orther.RegisterUser(config.DB, &registerInfo)
 		if err != nil {
-			log.Print("[Error] เกิดข้อผิดพลาดในการสมัครบัญชีผู้ใช้")
+			log.Print(err)
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"success": false,
 				"message": "เกิดข้อผิดพลาดในการสมัครบัญชีผู้ใช้",
@@ -485,7 +485,7 @@ func Removeacc(c *fiber.Ctx) error {
 	} else {
 		err = orther.RemoveAcc(config.DB, &removeaccinfo)
 		if err != nil {
-			log.Print("[Error] เกิดข้อผิดพลาดในการลบบัญชีผู้ใช้")
+			log.Print(err)
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"success": false,
 				"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
@@ -528,7 +528,7 @@ func GetlrubTasksCountv2(c *fiber.Ctx) error {
 	} else {
 		data, err := v2.LrubTasksCountV2(config.DB, lrubtaskscountvtwo.TaskId)
 		if err != nil {
-			log.Print("[Error] เกิดข้อผิดพลาดในการเรียกข้อมูลว่างานนั้นมีคนรับไปกี่คนและมีใครบ้าง")
+			log.Print(err)
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"success": false,
 				"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
@@ -702,7 +702,7 @@ func Reportv2(c *fiber.Ctx) error {
 			_ = os.Remove(fullpath)
 		}
 
-		log.Print("[Error] เกิดข้อผิดพลาดในการบันทึกข้อมูล")
+		log.Print(err)
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"success": false,
 			"message": "เกิดข้อผิดพลาดในการบันทึกข้อมูล",
@@ -746,7 +746,7 @@ func Addtask(c *fiber.Ctx) error {
 	} else {
 		err = assignor.AddTask(config.DB, &addtaskinfo)
 		if err != nil {
-			log.Print("[Error] เกิดข้อผิดพลาดในการเพิ่มงาน")
+			log.Print(err)
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"success": false,
 				"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
@@ -785,7 +785,7 @@ func Edittask(c *fiber.Ctx) error {
 	} else {
 		err = assignor.EditTask(config.DB, &edittaskinfo)
 		if err != nil {
-			log.Print("[Error] เกิดข้อผิดพลาดในการแก้ไขงาน")
+			log.Print(err)
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"success": false,
 				"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
@@ -824,7 +824,7 @@ func Removetask(c *fiber.Ctx) error {
 	} else {
 		err = assignor.RemoveTask(config.DB, &removetaskinfo)
 		if err != nil {
-			log.Print("[Error] เกิดข้อผิดพลาดในการลบงาน")
+			log.Print(err)
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"success": false,
 				"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
@@ -863,7 +863,7 @@ func Removereport(c *fiber.Ctx) error {
 	} else {
 		err = assignor.RemoveReport(config.DB, &removereportinfo)
 		if err != nil {
-			log.Print("[Error] เกิดข้อผิดพลาดในการลบการแจ้งรายงาน")
+			log.Print(err)
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"success": false,
 				"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
@@ -906,7 +906,7 @@ func TaskSuccess(c *fiber.Ctx) error {
 	} else {
 		err = assignor.TaskSuccess(config.DB, tasksuccesinfo.TaskID)
 		if err != nil {
-			log.Print("[Error] เกิดข้อผิดพลาดในการอนุมัติงาน")
+			log.Print(err)
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"success": false,
 				"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
@@ -944,7 +944,7 @@ func Lrubtask(c *fiber.Ctx) error {
 	} else {
 		err = worker.PerLrubTask(config.DB, &perLrubTaskInfo)
 		if err != nil {
-			log.Print("[Error] เกิดข้อผิดพลาดในการรับงาน")
+			log.Print(err)
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"success": false,
 				"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
@@ -981,7 +981,7 @@ func Yoklerk(c *fiber.Ctx) error {
 	} else {
 		err = worker.YokLerkTask(config.DB, &yoklerkTaskInfo)
 		if err != nil {
-			log.Print("[Error] เกิดข้อผิดพลาดในการยกเลิกงาน")
+			log.Print(err)
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"success": false,
 				"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
@@ -1037,10 +1037,10 @@ func Songtask(c *fiber.Ctx) error {
 
 	files := form.File["img"]
 	if len(files) == 0 {
-		log.Print("[Warning] กรุณาอัพโหลดไฟล์อย่างน้อย 1 ไฟล์")
+		log.Print("[Warning] กรุณาแนบรูปหลักฐานอย่างน้อย 1 รูป")
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
-			"message": "กรุณาอัพโหลดไฟล์อย่างน้อย 1 ไฟล์",
+			"message": "กรุณาแนบรูปหลักฐานอย่างน้อย 1 รูป",
 		})
 	}
 
@@ -1093,7 +1093,7 @@ func Songtask(c *fiber.Ctx) error {
 			fullpath := config.BasePath + path
 			_ = os.Remove(fullpath)
 		}
-
+		log.Print(err)
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"success": false,
 			"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
@@ -1132,7 +1132,7 @@ func YokLerkSongTask(c *fiber.Ctx) error {
 	} else {
 		err = worker.Yoklerksongtask(config.DB, &yoklerkSongTaskInfo)
 		if err != nil {
-			log.Print("[Error] เกิดข้อผิดพลาดในการยกเลิกการส่งงาน")
+			log.Print(err)
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 				"success": false,
 				"message": "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
