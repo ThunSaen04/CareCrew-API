@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/jmoiron/sqlx"
+	"github.com/project/carecrew/orther"
 )
 
 type PerSongTaskInfo struct {
@@ -80,6 +81,11 @@ func Songtask(db *sqlx.DB, persongTaskInfo *PerSongTaskInfo) error {
 			if err != nil {
 				return err
 			}
+			sendinfo := orther.SendNotiInfo{
+				Title: "งานรอการตรวจสอบ!!",
+				Body:  "พบงานที่ต้องการ การตรวจสอบใหม่",
+			}
+			orther.SendNotiSuccessToAssignor(db, &sendinfo)
 		}
 
 	} else {

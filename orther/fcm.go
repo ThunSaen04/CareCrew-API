@@ -2,7 +2,6 @@ package orther
 
 import (
 	"context"
-	"fmt"
 	"log"
 
 	"firebase.google.com/go/v4/messaging"
@@ -42,11 +41,11 @@ func SendNotificationToAll(db *sqlx.DB, title, body string) error {
 	var tokens []string
 	err = db.Select(&tokens, `SELECT token FROM "FCM_Tokens"`)
 	if err != nil {
-		log.Println("[Error] ไม่สามารถเรียกข้อมูล Token ได้:", err)
+		log.Print("[Error] ไม่สามารถเรียกข้อมูล Token ได้:", err)
 		return err
 	}
 	if len(tokens) == 0 {
-		log.Println("[Warning] ไม่พบ Token ใน DB")
+		log.Print("[Warning] ไม่พบ Token ใน DB")
 		return err
 	}
 	//token := "cMtcUYSqTZKogwbS4vEjM_:APA91bEAA1PhVC6ZwKkNvGqBaGuzahUf7q4zLDZNVsNDus-PVLneLBrykiExwZyyZdWC-lgplHtfTzo_orryGrUX_VCHj2ll20icnlae6ZV7LkHzGYLj4oc"
@@ -61,7 +60,7 @@ func SendNotificationToAll(db *sqlx.DB, title, body string) error {
 	if err != nil {
 		return err
 	}
-	log.Println("[System] ", "Success:", resp.SuccessCount, "Failure:", resp.FailureCount)
+	log.Print("[System] ", "Success:", resp.SuccessCount, "Failure:", resp.FailureCount)
 
 	return nil
 }
@@ -93,7 +92,7 @@ func SendNotiSuccessToPerInTask(db *sqlx.DB, sendnotiinfo *SendNotiInfo) error {
 		return err
 	}
 	if len(tokens) == 0 {
-		log.Println("[Warning] ไม่พบ Token ของผู้ที่รับงานนี้")
+		log.Print("[Warning] ไม่พบ Token")
 		return err
 	}
 	msg := &messaging.MulticastMessage{
@@ -107,6 +106,45 @@ func SendNotiSuccessToPerInTask(db *sqlx.DB, sendnotiinfo *SendNotiInfo) error {
 	if err != nil {
 		return err
 	}
-	fmt.Println("Success:", resp.SuccessCount, "Failure:", resp.FailureCount)
+	log.Print("Success:", resp.SuccessCount, "Failure:", resp.FailureCount)
+	return nil
+}
+
+func SendNotiSuccessToAssignor(db *sqlx.DB, sendnotiinfo *SendNotiInfo) error {
+	ctx := context.Background()
+	client, err := fcm.NewClient(
+		ctx,
+		fcm.WithCredentialsFile(config.FullFCMPath),
+	)
+	if err != nil {
+		return err
+	}
+
+	var tokens []string
+	err = db.Select(&tokens, `
+		SELECT DISTINCT t.token
+		FROM "Personnels" p
+		JOIN "FCM_Tokens" t ON t.personnel_id = p.personnel_id
+		WHERE p.role_type_id = 1;
+    `)
+	if err != nil {
+		return err
+	}
+	if len(tokens) == 0 {
+		log.Print("[Warning] ไม่พบ Token")
+		return err
+	}
+	msg := &messaging.MulticastMessage{
+		Notification: &messaging.Notification{
+			Title: sendnotiinfo.Title,
+			Body:  sendnotiinfo.Body,
+		},
+		Tokens: tokens,
+	}
+	resp, err := client.SendMulticast(ctx, msg)
+	if err != nil {
+		return err
+	}
+	log.Print("Success:", resp.SuccessCount, "Failure:", resp.FailureCount)
 	return nil
 }
