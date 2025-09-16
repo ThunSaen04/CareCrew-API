@@ -247,7 +247,7 @@ func GetSumbitTaskWithID(c *fiber.Ctx) error {
 
 	data, err := models.Get_Submit_Task_With_ID(config.DB, personnel_id, task_id)
 	if err != nil {
-		log.Print("[Error] เกิดข้อผิดพลาดในการเรียกข้อมูลการส่งงานของผูใช้: ", personnel_id, " (", task_id, ")", " ", err)
+		log.Print("[Error] เกิดข้อผิดพลาดในการเรียกข้อมูลการส่งงานของผู้ใช้ หรือผู้ใช้ไม่ได้รับงานดังกล่าว: ", personnel_id, " (", task_id, ")", " Not Found")
 		return c.SendStatus(fiber.StatusNotFound)
 	}
 	log.Print("[System] พบการเรียกข้อมูลการส่งงานของผูใช้: ", personnel_id, " (", task_id, ")")
