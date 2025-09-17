@@ -12,6 +12,7 @@ func Get_Task_Priority_Info(db *sqlx.DB) ([]TaskpriorityInfo, error) {
 	query := `
 		SELECT pt.priority_type_id, pt.name
 		FROM "Priority_types" pt
+		ORDER BY pt.priority_type_id
 	`
 	err := db.Select(&taskpriorityinfo, query)
 	return taskpriorityinfo, err

@@ -12,6 +12,7 @@ func Get_Task_Type_Info(db *sqlx.DB) ([]TasktypeInfo, error) {
 	query := `
 		SELECT tt.task_type_id, tt.name
 		FROM "Task_types" tt
+		ORDER BY tt.task_type_id
 	`
 	err := db.Select(&tasktypeinfo, query)
 	return tasktypeinfo, err
