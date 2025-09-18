@@ -1328,6 +1328,10 @@ const docTemplate = `{
                     "description": "Status_types",
                     "type": "string"
                 },
+                "task_due_at": {
+                    "description": "Tasks",
+                    "type": "string"
+                },
                 "task_id": {
                     "description": "Tasks",
                     "type": "integer"

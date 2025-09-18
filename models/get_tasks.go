@@ -16,12 +16,13 @@ type TasksInfo struct {
 	Status_types  string `db:"status_type" json:"status"`          //Status_types
 	Created_at    string `db:"created_at" json:"created_at"`       //Tasks
 	Updated_at    string `db:"updated_at" json:"updated_at"`       //Tasks
+	Task_due_at   string `db:"task_due_at" json:"task_due_at"`     //Tasks
 }
 
 func GetTasks(db *sqlx.DB) ([]TasksInfo, error) {
 	tasks := []TasksInfo{}
 	query := `
-        SELECT t.task_id, tt.name AS type_name, td.title, td.detail, td.location, pt.name AS priority_name, td.people_needed, p.first_name || ' ' || p.last_name AS assigned_by, st.name AS status_type, t.created_at, t.updated_at
+        SELECT t.task_id, tt.name AS type_name, td.title, td.detail, td.location, pt.name AS priority_name, td.people_needed, p.first_name || ' ' || p.last_name AS assigned_by, st.name AS status_type, t.created_at, t.updated_at, t.task_due_at
         FROM "Tasks" t
         LEFT JOIN "Task_types" tt ON t.task_type_id = tt.task_type_id
         LEFT JOIN "Tasks_detail" td ON t.task_id = td.task_id

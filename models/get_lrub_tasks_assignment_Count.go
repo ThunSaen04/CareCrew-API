@@ -16,7 +16,7 @@ func LrubTasksCount(db *sqlx.DB) ([]LrubTasksCountInfo, error) {
 	query := `
 		SELECT ta.task_id, STRING_AGG(p.personnel_id::TEXT, ', ') AS personnel_ids, COUNT(ta.personnel_id) AS personnel_count, STRING_AGG(p.first_name || ' ' || p.last_name, ', ') AS personnel_name
 		FROM "Tasks_assignment" ta
-		INNER JOIN "Personnels" p ON ta.personnel_id = p.personnel_id
+		LEFT JOIN "Personnels" p ON ta.personnel_id = p.personnel_id
 		GROUP BY ta.task_id;
 	`
 
@@ -24,5 +24,18 @@ func LrubTasksCount(db *sqlx.DB) ([]LrubTasksCountInfo, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	for i := range lrubAs {
+		if lrubAs[i].Personanel_Name == "" {
+			lrubAs[i].Personanel_Name = ""
+		}
+		if lrubAs[i].Personanel_ID == "" {
+			lrubAs[i].Personanel_ID = ""
+		}
+		if lrubAs[i].PersonnelCount == 0 {
+			lrubAs[i].PersonnelCount = 0
+		}
+	}
+
 	return lrubAs, nil
 }
