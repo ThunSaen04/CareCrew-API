@@ -111,6 +111,14 @@ func PerLrubTask(db *sqlx.DB, perLrubTaskInfo *PerLrubTaskInfo) error {
 		return errors.New("จำนวนคนรับงานครบแล้ว")
 	}
 
+	_, err = tranX.Exec(`
+			INSERT INTO "Worker_logs" (personnel_id, task_id, detail)
+			VALUES ($1, $2, $3)
+		`, perLrubTaskInfo.Personnel_id, perLrubTaskInfo.Task_id, "รับงาน")
+	if err != nil {
+		return err
+	}
+
 	/////////////////////////////////////////////////////////////////////////////////////////////////////
 	err = tranX.Commit()
 	if err != nil {

@@ -7,7 +7,8 @@ import (
 )
 
 type RemoveReportInfo struct {
-	Report_id int `db:"report_id" json:"report_id"`
+	Personnel_id int `db:"personnel_id" json:"personnel_id"`
+	Report_id    int `db:"report_id" json:"report_id"`
 }
 
 func RemoveReport(db *sqlx.DB, removeReportInfo *RemoveReportInfo) error {
@@ -41,6 +42,14 @@ func RemoveReport(db *sqlx.DB, removeReportInfo *RemoveReportInfo) error {
 		}
 	} else {
 		return errors.New("ไม่พบรายงานนี้")
+	}
+
+	_, err = tranX.Exec(`
+			INSERT INTO "Assignor_logs" (personnel_id, report_id, detail)
+			VALUES ($1, $2, $3)
+		`, removeReportInfo.Personnel_id, removeReportInfo.Report_id, "ลบการแจ้งเหตุเพื่อสร้างงาน")
+	if err != nil {
+		return err
 	}
 
 	err = tranX.Commit()

@@ -8,6 +8,7 @@ import (
 )
 
 type EditTaskInfo struct {
+	Personnel_id     int    `db:"personnel_id" json:"personnel_id"`
 	Task_id          int    `db:"task_id" json:"task_id"`                   //Tasks
 	Task_type_id     int    `db:"task_type_id" json:"task_type_id"`         //Tasks
 	Title            string `db:"title" json:"title"`                       //Tasks_detail
@@ -138,6 +139,14 @@ func EditTask(db *sqlx.DB, edittaskinfo *EditTaskInfo) error {
 
 	} else {
 		return errors.New("ไม่พบงานดังกล่าว")
+	}
+
+	_, err = tranX.Exec(`
+			INSERT INTO "Assignor_logs" (personnel_id, task_id, detail)
+			VALUES ($1, $2, $3)
+		`, edittaskinfo.Personnel_id, edittaskinfo.Task_id, "แก้ไขงาน")
+	if err != nil {
+		return err
 	}
 
 	err = tranX.Commit()

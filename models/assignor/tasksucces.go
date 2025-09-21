@@ -9,9 +9,10 @@ import (
 )
 
 type taskStatus struct {
-	Completed bool   `db:"completed" json:"completed"`
-	Status    int    `db:"status_type_id" json:"status_type_id"`
-	Title     string `db:"title" json:"title"`
+	Personnel_id int    `db:"personnel_id" json:"personnel_id"`
+	Completed    bool   `db:"completed" json:"completed"`
+	Status       int    `db:"status_type_id" json:"status_type_id"`
+	Title        string `db:"title" json:"title"`
 }
 
 func TaskSuccess(db *sqlx.DB, taskID int) error {
@@ -48,6 +49,14 @@ func TaskSuccess(db *sqlx.DB, taskID int) error {
 	} else {
 		log.Print("[Warning] สถานะงานไม่ถูกต้อง หรืองานที่สิ้นสุดแล้ว")
 		return errors.New("สถานะงานไม่ถูกต้อง หรืองานที่สิ้นสุดแล้ว")
+	}
+
+	_, err = tranX.Exec(`
+			INSERT INTO "Assignor_logs" (personnel_id, task_id, detail)
+			VALUES ($1, $2, $3)
+		`, task.Personnel_id, taskID, "อนุมัติเสร็จสิ้นงาน")
+	if err != nil {
+		return err
 	}
 
 	err = tranX.Commit()

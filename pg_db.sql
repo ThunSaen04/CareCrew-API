@@ -2,10 +2,12 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 17.5 (Ubuntu 17.5-1.pgdg24.10+1)
--- Dumped by pg_dump version 17.5
+\restrict dwp15iuulfyc7bauYOffx5ltqU0wGpF4rfo68l32dPUoZHwoUP372r1KSc4jCGe
 
--- Started on 2025-09-16 00:47:20
+-- Dumped from database version 17.5 (Ubuntu 17.5-1.pgdg24.10+1)
+-- Dumped by pg_dump version 17.6
+
+-- Started on 2025-09-21 22:01:17
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -22,6 +24,39 @@ SET row_security = off;
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
+
+--
+-- TOC entry 243 (class 1259 OID 33441)
+-- Name: Assignor_logs; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Assignor_logs" (
+    log_id integer NOT NULL,
+    personnel_id integer DEFAULT 0 NOT NULL,
+    task_id integer DEFAULT 0 NOT NULL,
+    report_id integer DEFAULT 0 NOT NULL,
+    detail text DEFAULT '-'::text,
+    file text DEFAULT '-'::text,
+    created_at time with time zone DEFAULT now()
+);
+
+
+ALTER TABLE public."Assignor_logs" OWNER TO postgres;
+
+--
+-- TOC entry 242 (class 1259 OID 33440)
+-- Name: Assignor_logs_log_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public."Assignor_logs" ALTER COLUMN log_id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public."Assignor_logs_log_id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
 
 --
 -- TOC entry 238 (class 1259 OID 24735)
@@ -79,6 +114,39 @@ ALTER TABLE public."Reports" OWNER TO postgres;
 
 ALTER TABLE public."Reports" ALTER COLUMN report_id ADD GENERATED ALWAYS AS IDENTITY (
     SEQUENCE NAME public."Guest_Reports_report_id_seq"
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- TOC entry 241 (class 1259 OID 33414)
+-- Name: Worker_logs; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Worker_logs" (
+    log_id integer NOT NULL,
+    personnel_id integer DEFAULT 0 NOT NULL,
+    task_id integer DEFAULT 0 NOT NULL,
+    report_id integer DEFAULT 0 NOT NULL,
+    detail text DEFAULT '-'::text,
+    file text DEFAULT '-'::text,
+    created_at time with time zone DEFAULT now()
+);
+
+
+ALTER TABLE public."Worker_logs" OWNER TO postgres;
+
+--
+-- TOC entry 240 (class 1259 OID 33413)
+-- Name: Personnel_logs_log_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public."Worker_logs" ALTER COLUMN log_id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public."Personnel_logs_log_id_seq"
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -243,7 +311,8 @@ CREATE TABLE public."Tasks" (
     status_type_id integer DEFAULT 3,
     priority_type_id integer DEFAULT 3,
     completed boolean DEFAULT false NOT NULL,
-    completed_at timestamp with time zone
+    completed_at timestamp with time zone,
+    task_due_at timestamp with time zone
 );
 
 
@@ -374,7 +443,16 @@ CREATE TABLE public."Users" (
 ALTER TABLE public."Users" OWNER TO postgres;
 
 --
--- TOC entry 3347 (class 2606 OID 24750)
+-- TOC entry 3375 (class 2606 OID 33453)
+-- Name: Assignor_logs Assignor_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Assignor_logs"
+    ADD CONSTRAINT "Assignor_logs_pkey" PRIMARY KEY (log_id);
+
+
+--
+-- TOC entry 3369 (class 2606 OID 24750)
 -- Name: FCM_Tokens FCM_Tokens_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -383,7 +461,7 @@ ALTER TABLE ONLY public."FCM_Tokens"
 
 
 --
--- TOC entry 3343 (class 2606 OID 16531)
+-- TOC entry 3365 (class 2606 OID 16531)
 -- Name: Reports Guest_Reports_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -392,7 +470,16 @@ ALTER TABLE ONLY public."Reports"
 
 
 --
--- TOC entry 3324 (class 2606 OID 16413)
+-- TOC entry 3373 (class 2606 OID 33426)
+-- Name: Worker_logs Personnel_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Worker_logs"
+    ADD CONSTRAINT "Personnel_logs_pkey" PRIMARY KEY (log_id);
+
+
+--
+-- TOC entry 3346 (class 2606 OID 16413)
 -- Name: Personnels Personnels_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -401,7 +488,7 @@ ALTER TABLE ONLY public."Personnels"
 
 
 --
--- TOC entry 3334 (class 2606 OID 16445)
+-- TOC entry 3356 (class 2606 OID 16445)
 -- Name: Priority_types Priority_types_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -410,7 +497,7 @@ ALTER TABLE ONLY public."Priority_types"
 
 
 --
--- TOC entry 3326 (class 2606 OID 16415)
+-- TOC entry 3348 (class 2606 OID 16415)
 -- Name: Role_types Role_types_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -419,7 +506,7 @@ ALTER TABLE ONLY public."Role_types"
 
 
 --
--- TOC entry 3332 (class 2606 OID 16437)
+-- TOC entry 3354 (class 2606 OID 16437)
 -- Name: Status_types Status_types_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -428,7 +515,7 @@ ALTER TABLE ONLY public."Status_types"
 
 
 --
--- TOC entry 3328 (class 2606 OID 16417)
+-- TOC entry 3350 (class 2606 OID 16417)
 -- Name: Task_types Task_types_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -437,7 +524,7 @@ ALTER TABLE ONLY public."Task_types"
 
 
 --
--- TOC entry 3338 (class 2606 OID 16498)
+-- TOC entry 3360 (class 2606 OID 16498)
 -- Name: Tasks_attachments Tasks_attachments_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -446,7 +533,7 @@ ALTER TABLE ONLY public."Tasks_attachments"
 
 
 --
--- TOC entry 3340 (class 2606 OID 16512)
+-- TOC entry 3362 (class 2606 OID 16512)
 -- Name: Tasks_detail Tasks_detail_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -455,7 +542,7 @@ ALTER TABLE ONLY public."Tasks_detail"
 
 
 --
--- TOC entry 3336 (class 2606 OID 16454)
+-- TOC entry 3358 (class 2606 OID 16454)
 -- Name: Tasks Tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -464,7 +551,7 @@ ALTER TABLE ONLY public."Tasks"
 
 
 --
--- TOC entry 3330 (class 2606 OID 16419)
+-- TOC entry 3352 (class 2606 OID 16419)
 -- Name: Users Users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -473,7 +560,7 @@ ALTER TABLE ONLY public."Users"
 
 
 --
--- TOC entry 3345 (class 2606 OID 16542)
+-- TOC entry 3367 (class 2606 OID 16542)
 -- Name: Tasks_assignment assignment_id_PK; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -482,7 +569,7 @@ ALTER TABLE ONLY public."Tasks_assignment"
 
 
 --
--- TOC entry 3349 (class 2606 OID 24752)
+-- TOC entry 3371 (class 2606 OID 24752)
 -- Name: FCM_Tokens unique_token; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -491,7 +578,7 @@ ALTER TABLE ONLY public."FCM_Tokens"
 
 
 --
--- TOC entry 3341 (class 1259 OID 16558)
+-- TOC entry 3363 (class 1259 OID 16558)
 -- Name: fki_assigned_by_FK; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -499,7 +586,7 @@ CREATE INDEX "fki_assigned_by_FK" ON public."Tasks_detail" USING btree (assigned
 
 
 --
--- TOC entry 3356 (class 2606 OID 16553)
+-- TOC entry 3382 (class 2606 OID 16553)
 -- Name: Tasks_detail assigned_by_FK; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -508,7 +595,7 @@ ALTER TABLE ONLY public."Tasks_detail"
 
 
 --
--- TOC entry 3355 (class 2606 OID 24730)
+-- TOC entry 3381 (class 2606 OID 24730)
 -- Name: Tasks_attachments assignment_id_FK; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -517,7 +604,7 @@ ALTER TABLE ONLY public."Tasks_attachments"
 
 
 --
--- TOC entry 3351 (class 2606 OID 16420)
+-- TOC entry 3377 (class 2606 OID 16420)
 -- Name: Users personnel_id_FK; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -526,7 +613,7 @@ ALTER TABLE ONLY public."Users"
 
 
 --
--- TOC entry 3361 (class 2606 OID 24753)
+-- TOC entry 3387 (class 2606 OID 24753)
 -- Name: FCM_Tokens personnel_id_FK; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -535,7 +622,7 @@ ALTER TABLE ONLY public."FCM_Tokens"
 
 
 --
--- TOC entry 3358 (class 2606 OID 32956)
+-- TOC entry 3384 (class 2606 OID 32956)
 -- Name: Reports personnel_id_FK; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -544,7 +631,7 @@ ALTER TABLE ONLY public."Reports"
 
 
 --
--- TOC entry 3359 (class 2606 OID 16543)
+-- TOC entry 3385 (class 2606 OID 16543)
 -- Name: Tasks_assignment personnel_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -553,7 +640,7 @@ ALTER TABLE ONLY public."Tasks_assignment"
 
 
 --
--- TOC entry 3352 (class 2606 OID 16465)
+-- TOC entry 3378 (class 2606 OID 16465)
 -- Name: Tasks priority_type_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -562,7 +649,7 @@ ALTER TABLE ONLY public."Tasks"
 
 
 --
--- TOC entry 3350 (class 2606 OID 16425)
+-- TOC entry 3376 (class 2606 OID 16425)
 -- Name: Personnels role_type_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -571,7 +658,7 @@ ALTER TABLE ONLY public."Personnels"
 
 
 --
--- TOC entry 3353 (class 2606 OID 16460)
+-- TOC entry 3379 (class 2606 OID 16460)
 -- Name: Tasks status_type_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -580,7 +667,7 @@ ALTER TABLE ONLY public."Tasks"
 
 
 --
--- TOC entry 3357 (class 2606 OID 16513)
+-- TOC entry 3383 (class 2606 OID 16513)
 -- Name: Tasks_detail task_id_FK; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -589,7 +676,7 @@ ALTER TABLE ONLY public."Tasks_detail"
 
 
 --
--- TOC entry 3360 (class 2606 OID 16548)
+-- TOC entry 3386 (class 2606 OID 16548)
 -- Name: Tasks_assignment task_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -598,7 +685,7 @@ ALTER TABLE ONLY public."Tasks_assignment"
 
 
 --
--- TOC entry 3354 (class 2606 OID 16455)
+-- TOC entry 3380 (class 2606 OID 16455)
 -- Name: Tasks task_type_id_FK; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -606,9 +693,11 @@ ALTER TABLE ONLY public."Tasks"
     ADD CONSTRAINT "task_type_id_FK" FOREIGN KEY (task_type_id) REFERENCES public."Task_types"(task_type_id) ON DELETE SET NULL;
 
 
--- Completed on 2025-09-16 00:47:21
+-- Completed on 2025-09-21 22:01:17
 
 --
 -- PostgreSQL database dump complete
 --
+
+\unrestrict dwp15iuulfyc7bauYOffx5ltqU0wGpF4rfo68l32dPUoZHwoUP372r1KSc4jCGe
 

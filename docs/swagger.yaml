@@ -14,6 +14,8 @@ definitions:
       people_needed:
         description: Tasks_detail
         type: integer
+      personnel_id:
+        type: integer
       priority_type_id:
         description: Task
         type: integer
@@ -35,6 +37,8 @@ definitions:
       people_needed:
         description: Tasks_detail
         type: integer
+      personnel_id:
+        type: integer
       priority_type_id:
         description: Tasks
         type: integer
@@ -50,11 +54,15 @@ definitions:
     type: object
   assignor.RemoveReportInfo:
     properties:
+      personnel_id:
+        type: integer
       report_id:
         type: integer
     type: object
   assignor.RemoveTaskInfo:
     properties:
+      personnel_id:
+        type: integer
       task_id:
         type: integer
     type: object

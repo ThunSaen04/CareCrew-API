@@ -75,6 +75,14 @@ func YokLerkTask(db *sqlx.DB, yokLerkTaskInfo *YokLerkTaskInfo) error {
 		return errors.New("ไม่สามารถยกเลิกงานได้ กรุณายกเลิกการส่งงานก่อน")
 	}
 
+	_, err = tranX.Exec(`
+			INSERT INTO "Worker_logs" (personnel_id, task_id, detail)
+			VALUES ($1, $2, $3)
+		`, yokLerkTaskInfo.Personnel_id, yokLerkTaskInfo.Task_id, "ยกเลิกการรับงาน")
+	if err != nil {
+		return err
+	}
+
 	err = tranX.Commit()
 	if err != nil {
 		return err

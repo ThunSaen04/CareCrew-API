@@ -7,7 +7,8 @@ import (
 )
 
 type RemoveTaskInfo struct {
-	Task_id int `db:"task_id" json:"task_id"`
+	Personnel_id int `db:"personnel_id" json:"personnel_id"`
+	Task_id      int `db:"task_id" json:"task_id"`
 }
 
 func RemoveTask(db *sqlx.DB, removeTaskInfo *RemoveTaskInfo) error {
@@ -42,6 +43,14 @@ func RemoveTask(db *sqlx.DB, removeTaskInfo *RemoveTaskInfo) error {
 		}
 	} else {
 		return errors.New("ไม่พบงาน")
+	}
+
+	_, err = tranX.Exec(`
+			INSERT INTO "Assignor_logs" (personnel_id, task_id, detail)
+			VALUES ($1, $2, $3)
+		`, removeTaskInfo.Personnel_id, removeTaskInfo.Task_id, "ลบงาน")
+	if err != nil {
+		return err
 	}
 
 	err = tranX.Commit()

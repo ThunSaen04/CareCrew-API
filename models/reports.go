@@ -16,7 +16,14 @@ type ReportInfo struct {
 
 func Report(db *sqlx.DB, greportInfo *ReportInfo) error {
 
-	_, err := db.Exec(
+	tranX, err := db.Beginx()
+	if err != nil {
+		return err
+	}
+
+	defer tranX.Rollback()
+
+	_, err = tranX.Exec(
 		`INSERT INTO "Reports" (title, personnel_id, detail, location, file, created_at)
 		VALUES ($1, $2, $3, $4, $5, NOW())`,
 		greportInfo.Title,
@@ -25,6 +32,19 @@ func Report(db *sqlx.DB, greportInfo *ReportInfo) error {
 		greportInfo.Location,
 		greportInfo.File,
 	)
+	if err != nil {
+		return err
+	}
+
+	_, err = tranX.Exec(`
+			INSERT INTO "Worker_logs" (personnel_id, report_id, detail, file)
+			VALUES ($1, $2, $3, $4)
+		`, greportInfo.PersonnelID, greportInfo.Report_ID, "แจ้งเหตุเพื่อสร้างงาน", greportInfo.File)
+	if err != nil {
+		return err
+	}
+
+	err = tranX.Commit()
 	if err != nil {
 		return err
 	}

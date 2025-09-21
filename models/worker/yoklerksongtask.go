@@ -2,13 +2,9 @@ package worker
 
 import (
 	"errors"
-	"fmt"
 	"log"
-	"os"
-	"strings"
 
 	"github.com/jmoiron/sqlx"
-	"github.com/project/carecrew/config"
 )
 
 type YokLerkSongTaskInfo struct {
@@ -114,30 +110,38 @@ func Yoklerksongtask(db *sqlx.DB, yoklerksongtaskinfo *YokLerkSongTaskInfo) erro
 					return err
 				}
 
-				path := strings.Split(getfilepath.File, ",")
-				for _, p := range path {
-					p = strings.TrimSpace(p)
-					if p != "" {
-						fullpath := config.BasePath + p
+				// path := strings.Split(getfilepath.File, ",")
+				// for _, p := range path {
+				// 	p = strings.TrimSpace(p)
+				// 	if p != "" {
+				// 		fullpath := config.BasePath + p
 
-						err := os.Remove(fullpath)
-						if err != nil {
-							if os.IsNotExist(err) {
-								log.Printf("ไม่พบไฟล์: %s", fullpath)
-							} else {
-								return fmt.Errorf("ลบไฟล์ไม่สำเร็จ %s: %w", fullpath, err)
-							}
-						} else {
-							log.Printf("ลบไฟล์สำเร็จ: %s", fullpath)
-						}
-					}
-				}
+				// 		err := os.Remove(fullpath)
+				// 		if err != nil {
+				// 			if os.IsNotExist(err) {
+				// 				log.Printf("ไม่พบไฟล์: %s", fullpath)
+				// 			} else {
+				// 				return fmt.Errorf("ลบไฟล์ไม่สำเร็จ %s: %w", fullpath, err)
+				// 			}
+				// 		} else {
+				// 			log.Printf("ลบไฟล์สำเร็จ: %s", fullpath)
+				// 		}
+				// 	}
+				// }
 			} else {
 				return errors.New("ไม่พบข้อมูลการส่งงาน")
 			}
 		}
 	} else {
 		return errors.New("ไม่พบงานการส่งงานนี้")
+	}
+
+	_, err = tranX.Exec(`
+			INSERT INTO "Worker_logs" (personnel_id, task_id, detail)
+			VALUES ($1, $2, $3)
+		`, yoklerksongtaskinfo.Personnel_id, yoklerksongtaskinfo.Task_id, "ยกเลิกส่งงาน")
+	if err != nil {
+		return err
 	}
 
 	err = tranX.Commit()

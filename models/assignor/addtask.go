@@ -8,6 +8,7 @@ import (
 )
 
 type AddTaskInfo struct {
+	Personnel_id     int    `db:"personnel_id" json:"personnel_id"`
 	Task_type_id     int    `db:"task_type_id" json:"task_type_id"`         //Task
 	Priority_type_id int    `db:"priority_type_id" json:"priority_type_id"` //Task
 	Title            string `db:"title" json:"title"`                       //Tasks_detail
@@ -52,6 +53,14 @@ func AddTask(db *sqlx.DB, addnewtaskinfo *AddTaskInfo) error {
 		addnewtaskinfo.People_needed,
 		addnewtaskinfo.Assigned_by,
 	)
+	if err != nil {
+		return err
+	}
+
+	_, err = tranX.Exec(`
+			INSERT INTO "Assignor_logs" (personnel_id, task_id, detail)
+			VALUES ($1, $2, $3)
+		`, addnewtaskinfo.Personnel_id, task_id, "เพิ่มงานใหม่")
 	if err != nil {
 		return err
 	}

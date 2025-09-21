@@ -92,6 +92,14 @@ func Songtask(db *sqlx.DB, persongTaskInfo *PerSongTaskInfo) error {
 		return errors.New("ไม่พบงานที่รับหรือพบว่ามีการส่งงานนี้แล้ว")
 	}
 
+	_, err = tranX.Exec(`
+			INSERT INTO "Worker_logs" (personnel_id, task_id, detail, file)
+			VALUES ($1, $2, $3, $4)
+		`, persongTaskInfo.Personnel_id, persongTaskInfo.Task_id, "ส่งงาน", persongTaskInfo.File)
+	if err != nil {
+		return err
+	}
+
 	err = tranX.Commit()
 	if err != nil {
 		return err

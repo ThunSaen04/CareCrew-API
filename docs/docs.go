@@ -977,6 +977,9 @@ const docTemplate = `{
                     "description": "Tasks_detail",
                     "type": "integer"
                 },
+                "personnel_id": {
+                    "type": "integer"
+                },
                 "priority_type_id": {
                     "description": "Task",
                     "type": "integer"
@@ -1006,6 +1009,9 @@ const docTemplate = `{
                     "description": "Tasks_detail",
                     "type": "integer"
                 },
+                "personnel_id": {
+                    "type": "integer"
+                },
                 "priority_type_id": {
                     "description": "Tasks",
                     "type": "integer"
@@ -1027,6 +1033,9 @@ const docTemplate = `{
         "assignor.RemoveReportInfo": {
             "type": "object",
             "properties": {
+                "personnel_id": {
+                    "type": "integer"
+                },
                 "report_id": {
                     "type": "integer"
                 }
@@ -1035,6 +1044,9 @@ const docTemplate = `{
         "assignor.RemoveTaskInfo": {
             "type": "object",
             "properties": {
+                "personnel_id": {
+                    "type": "integer"
+                },
                 "task_id": {
                     "type": "integer"
                 }
