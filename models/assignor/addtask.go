@@ -2,6 +2,7 @@ package assignor
 
 import (
 	"errors"
+	"time"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/project/carecrew/orther"
@@ -16,6 +17,7 @@ type AddTaskInfo struct {
 	Location         string `db:"location" json:"location"`                 //Tasks_detail
 	People_needed    int    `db:"people_needed" json:"people_needed"`       //Tasks_detail
 	Assigned_by      int    `db:"assigned_by" json:"assigned_by"`           //Tasks_detail (ใช้ PersonnelIDDD)
+	Task_due_at      string `db:"task_due_at" json:"task_due_at"`           //Task
 }
 
 func AddTask(db *sqlx.DB, addnewtaskinfo *AddTaskInfo) error {
@@ -30,14 +32,19 @@ func AddTask(db *sqlx.DB, addnewtaskinfo *AddTaskInfo) error {
 		return errors.New("กรุณาระบุจำนวนบุคลากรที่ต้องการ (ขั้นต่ำ 1คน)")
 	}
 
+	if addnewtaskinfo.Task_due_at == "" {
+		addnewtaskinfo.Task_due_at = time.Now().Add(7 * 24 * time.Hour).Format("2006-01-02 15:04:05-07")
+	}
+
 	var task_id int
 
 	err = tranX.QueryRow(
-		`INSERT INTO "Tasks" (task_type_id, priority_type_id)
-		VALUES ($1, $2)
+		`INSERT INTO "Tasks" (task_type_id, priority_type_id, task_due_at)
+		VALUES ($1, $2, $3)
 		RETURNING task_id`,
 		addnewtaskinfo.Task_type_id,
 		addnewtaskinfo.Priority_type_id,
+		addnewtaskinfo.Task_due_at,
 	).Scan(&task_id)
 	if err != nil {
 		return err

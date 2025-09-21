@@ -16,6 +16,7 @@ type EditTaskInfo struct {
 	Location         string `db:"location" json:"location"`                 //Tasks_detail
 	Priority_type_id int    `db:"priority_type_id" json:"priority_type_id"` //Tasks
 	People_needed    int    `db:"people_needed" json:"people_needed"`       //Tasks_detail
+	Task_due_at      string `db:"task_due_at" json:"task_due_at"`           //Task
 }
 
 func EditTask(db *sqlx.DB, edittaskinfo *EditTaskInfo) error {
@@ -43,7 +44,7 @@ func EditTask(db *sqlx.DB, edittaskinfo *EditTaskInfo) error {
 		//ข้อมูลงาน
 		var taskinfo EditTaskInfo
 		query = `
-		SELECT t.task_id, t.task_type_id, td.title, td.detail, td.location, t.priority_type_id, td.people_needed
+		SELECT t.task_id, t.task_type_id, td.title, td.detail, td.location, t.priority_type_id, td.people_needed, t.task_due_at
 		FROM "Tasks" t
 		LEFT JOIN "Tasks_detail" td	ON t.task_id = td.task_id
 		WHERE t.task_id = $1
@@ -51,6 +52,19 @@ func EditTask(db *sqlx.DB, edittaskinfo *EditTaskInfo) error {
 		err = tranX.Get(&taskinfo, query, edittaskinfo.Task_id)
 		if err != nil {
 			return errors.New("เกิดข้อผิดพลาดในการเรียกข้อมูลงาน")
+		}
+
+		//กำหนดส่งงาน
+		if edittaskinfo.Task_due_at != "" && edittaskinfo.Task_due_at != taskinfo.Task_due_at {
+			query = `
+				UPDATE "Tasks"
+				SET task_due_at = $1
+				WHERE task_id = $2
+			`
+			_, err = tranX.Exec(query, edittaskinfo.Task_due_at, edittaskinfo.Task_id)
+			if err != nil {
+				return errors.New("แก้ไข กำหนดส่งงาน ไม่สำเร็จ")
+			}
 		}
 
 		//ประเภทงาน
