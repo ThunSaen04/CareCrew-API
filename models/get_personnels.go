@@ -10,12 +10,13 @@ type PersonnelsInfo struct {
 	LastName    string `db:"last_name" json:"last_name"`       //Personnels
 	Phone       string `db:"phone" json:"phone"`               //Personnels
 	RoleName    string `db:"name" json:"role_name"`            //Role_types
+	File        string `db:"file" json:"file"`                 //Personnels
 }
 
 func GetPersonnelsInfo(db *sqlx.DB) ([]PersonnelsInfo, error) {
 	personnels := []PersonnelsInfo{}
 	query := `
-        SELECT p.personnel_id, p.first_name, p.last_name, p.phone, r.name
+        SELECT p.personnel_id, p.first_name, p.last_name, p.phone, r.name, p.file
         FROM "Personnels" p
         LEFT JOIN "Role_types" r ON p.role_type_id = r.role_type_id
 		ORDER BY p.personnel_id DESC

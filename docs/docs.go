@@ -359,6 +359,56 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/personnels/{id}/profile": {
+            "put": {
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Orther"
+                ],
+                "summary": "เปลี่ยนโปรไฟล์",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "รหัสบุคลากร",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "ไฟล์รูปภาพ",
+                        "name": "img",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.UpdateProfileInfo"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    }
+                }
+            }
+        },
         "/api/personnels/{personnelID}": {
             "get": {
                 "produces": [
@@ -1153,6 +1203,20 @@ const docTemplate = `{
                 }
             }
         },
+        "handlers.UpdateProfileInfo": {
+            "type": "object",
+            "properties": {
+                "files": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
         "models.LrubTasksCountInfo": {
             "type": "object",
             "properties": {
@@ -1189,6 +1253,10 @@ const docTemplate = `{
         "models.PersonnelsInfo": {
             "type": "object",
             "properties": {
+                "file": {
+                    "description": "Personnels",
+                    "type": "string"
+                },
                 "first_name": {
                     "description": "Personnels",
                     "type": "string"

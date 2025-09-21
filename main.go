@@ -83,6 +83,8 @@ func main() {
 	app.Post("/api/songtask", handlers.Songtask)               // ส่งงาน..
 	app.Post("/api/yoklerksongtask", handlers.YokLerkSongTask) // ยกเลิกส่งงาน..
 
+	app.Put("/api/personnels/:id/profile", handlers.UpdateProfile) // เปลี่ยนโปรไฟล์
+
 	//FCM
 	//app.Post("/api/fcmsend", handlers.SendFCM)
 	//app.Post("/api/fcmsendtoperintask", handlers.SendFCM2PInT) //ใช้ทดสอบส่งแจ้งเตือนไปหาผู้ใช้ที่รับงานนั้น

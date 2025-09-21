@@ -131,6 +131,15 @@ definitions:
       success:
         type: boolean
     type: object
+  handlers.UpdateProfileInfo:
+    properties:
+      files:
+        type: string
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
   models.LrubTasksCountInfo:
     properties:
       personnel_count:
@@ -156,6 +165,9 @@ definitions:
     type: object
   models.PersonnelsInfo:
     properties:
+      file:
+        description: Personnels
+        type: string
       first_name:
         description: Personnels
         type: string
@@ -557,6 +569,39 @@ paths:
       summary: เรียกข้อมูลผู้ใช้งานทั้งหมด
       tags:
       - GetMethods
+  /api/personnels/{id}/profile:
+    put:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: รหัสบุคลากร
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: ไฟล์รูปภาพ
+        in: formData
+        name: img
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.UpdateProfileInfo'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Res'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handlers.Res'
+      summary: เปลี่ยนโปรไฟล์
+      tags:
+      - Orther
   /api/personnels/{personnelID}:
     get:
       parameters:
