@@ -47,7 +47,7 @@ func RemoveReport(db *sqlx.DB, removeReportInfo *RemoveReportInfo) error {
 	_, err = tranX.Exec(`
 			INSERT INTO "Assignor_logs" (personnel_id, report_id, detail)
 			VALUES ($1, $2, $3)
-		`, removeReportInfo.Personnel_id, removeReportInfo.Report_id, "ลบการแจ้งเหตุเพื่อสร้างงาน")
+		`, removeReportInfo.Personnel_id, removeReportInfo.Report_id, "ลบรายการแจ้งเหตุสร้างงาน")
 	if err != nil {
 		return err
 	}

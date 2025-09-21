@@ -2,6 +2,7 @@ package models
 
 import (
 	"github.com/jmoiron/sqlx"
+	"github.com/project/carecrew/config"
 )
 
 type PersonnelsInfo struct {
@@ -21,7 +22,17 @@ func GetPersonnelsInfo(db *sqlx.DB) ([]PersonnelsInfo, error) {
         LEFT JOIN "Role_types" r ON p.role_type_id = r.role_type_id
 		ORDER BY p.personnel_id DESC
     `
-
 	err := db.Select(&personnels, query)
-	return personnels, err
+	if err != nil {
+		return nil, err
+	}
+
+	nullFile := "https://server.lcadv.online/Download/null_profile.png"
+	for i := range personnels {
+		if personnels[i].File != nullFile {
+			personnels[i].File = config.APIURL + personnels[i].File
+		}
+	}
+
+	return personnels, nil
 }

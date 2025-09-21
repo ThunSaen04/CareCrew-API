@@ -2,6 +2,7 @@ package models
 
 import (
 	"github.com/jmoiron/sqlx"
+	"github.com/project/carecrew/config"
 )
 
 func GetPersonnelsInfo_With_ID(db *sqlx.DB, PersonnelID int) (*PersonnelsInfo, error) {
@@ -16,6 +17,11 @@ func GetPersonnelsInfo_With_ID(db *sqlx.DB, PersonnelID int) (*PersonnelsInfo, e
 	err := db.Get(&personnels, query, PersonnelID)
 	if err != nil {
 		return nil, err
+	}
+
+	nullFile := "https://server.lcadv.online/Download/null_profile.png"
+	if personnels.File != nullFile {
+		personnels.File = config.APIURL + personnels.File
 	}
 
 	return &personnels, nil

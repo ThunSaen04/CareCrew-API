@@ -39,7 +39,7 @@ func Report(db *sqlx.DB, greportInfo *ReportInfo) error {
 	_, err = tranX.Exec(`
 			INSERT INTO "Worker_logs" (personnel_id, report_id, detail, file)
 			VALUES ($1, $2, $3, $4)
-		`, greportInfo.PersonnelID, greportInfo.Report_ID, "แจ้งเหตุเพื่อสร้างงาน", greportInfo.File)
+		`, greportInfo.PersonnelID, greportInfo.Report_ID, "แจ้งเหตุสร้างงาน", greportInfo.File)
 	if err != nil {
 		return err
 	}
