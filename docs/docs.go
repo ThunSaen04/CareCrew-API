@@ -880,7 +880,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/handlers.EditTaskSt"
+                            "$ref": "#/definitions/handlers.TaskSuccessSt"
                         }
                     }
                 ],
@@ -1034,6 +1034,10 @@ const docTemplate = `{
                     "description": "Task",
                     "type": "integer"
                 },
+                "task_due_at": {
+                    "description": "Task",
+                    "type": "string"
+                },
                 "task_type_id": {
                     "description": "Task",
                     "type": "integer"
@@ -1065,6 +1069,10 @@ const docTemplate = `{
                 "priority_type_id": {
                     "description": "Tasks",
                     "type": "integer"
+                },
+                "task_due_at": {
+                    "description": "Task",
+                    "type": "string"
                 },
                 "task_id": {
                     "description": "Tasks",
@@ -1133,14 +1141,6 @@ const docTemplate = `{
                 }
             }
         },
-        "handlers.EditTaskSt": {
-            "type": "object",
-            "properties": {
-                "task_id": {
-                    "type": "integer"
-                }
-            }
-        },
         "handlers.LrubTasksCountvTwo": {
             "type": "object",
             "properties": {
@@ -1200,6 +1200,17 @@ const docTemplate = `{
                 },
                 "success": {
                     "type": "boolean"
+                }
+            }
+        },
+        "handlers.TaskSuccessSt": {
+            "type": "object",
+            "properties": {
+                "personnel_id": {
+                    "type": "integer"
+                },
+                "task_id": {
+                    "type": "integer"
                 }
             }
         },

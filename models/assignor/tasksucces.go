@@ -15,7 +15,7 @@ type taskStatus struct {
 	Title        string `db:"title" json:"title"`
 }
 
-func TaskSuccess(db *sqlx.DB, taskID int) error {
+func TaskSuccess(db *sqlx.DB, taskID, personnel_id int) error {
 	tranX, err := db.Beginx()
 	if err != nil {
 		return err
@@ -54,7 +54,7 @@ func TaskSuccess(db *sqlx.DB, taskID int) error {
 	_, err = tranX.Exec(`
 			INSERT INTO "Assignor_logs" (personnel_id, task_id, detail)
 			VALUES ($1, $2, $3)
-		`, task.Personnel_id, taskID, "อนุมัติเสร็จสิ้นงาน")
+		`, personnel_id, taskID, "อนุมัติเสร็จสิ้นงาน")
 	if err != nil {
 		return err
 	}

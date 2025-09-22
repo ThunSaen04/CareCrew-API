@@ -19,6 +19,9 @@ definitions:
       priority_type_id:
         description: Task
         type: integer
+      task_due_at:
+        description: Task
+        type: string
       task_type_id:
         description: Task
         type: integer
@@ -42,6 +45,9 @@ definitions:
       priority_type_id:
         description: Tasks
         type: integer
+      task_due_at:
+        description: Task
+        type: string
       task_id:
         description: Tasks
         type: integer
@@ -86,11 +92,6 @@ definitions:
       success:
         type: boolean
     type: object
-  handlers.EditTaskSt:
-    properties:
-      task_id:
-        type: integer
-    type: object
   handlers.LrubTasksCountvTwo:
     properties:
       task_id:
@@ -130,6 +131,13 @@ definitions:
         type: string
       success:
         type: boolean
+    type: object
+  handlers.TaskSuccessSt:
+    properties:
+      personnel_id:
+        type: integer
+      task_id:
+        type: integer
     type: object
   handlers.UpdateProfileInfo:
     properties:
@@ -907,7 +915,7 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/handlers.EditTaskSt'
+          $ref: '#/definitions/handlers.TaskSuccessSt'
       produces:
       - application/json
       responses:

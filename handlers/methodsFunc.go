@@ -870,8 +870,9 @@ func Removereport(c *fiber.Ctx) error {
 	})
 }
 
-type EditTaskSt struct {
-	TaskID int `json:"task_id"`
+type TaskSuccessSt struct {
+	Personnels_ID int `json:"personnel_id"`
+	TaskID        int `json:"task_id"`
 }
 
 // การอนุมัติงาน(เสร็จสิ้นงาน)
@@ -880,13 +881,13 @@ type EditTaskSt struct {
 // @Tags Assignor
 // @Accept json
 // @Produce json
-// @Param request body EditTaskSt true "ข้อมูลการอนุมัติงาน(เสร็จสิ้นงาน)"
+// @Param request body TaskSuccessSt true "ข้อมูลการอนุมัติงาน(เสร็จสิ้นงาน)"
 // @Success 200 {object} Res
 // @Failure 400 {object} Res
 // @Router /api/tasksuccess [post]
 func TaskSuccess(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
-	var tasksuccesinfo EditTaskSt
+	var tasksuccesinfo TaskSuccessSt
 
 	err := c.BodyParser(&tasksuccesinfo)
 	if err != nil {
@@ -896,7 +897,7 @@ func TaskSuccess(c *fiber.Ctx) error {
 			Message: "รูปแบบข้อมูลการอนุมัติงานไม่ถูกต้อง",
 		})
 	} else {
-		err = assignor.TaskSuccess(config.DB, tasksuccesinfo.TaskID)
+		err = assignor.TaskSuccess(config.DB, tasksuccesinfo.TaskID, tasksuccesinfo.Personnels_ID)
 		if err != nil {
 			log.Print(err)
 			return c.Status(fiber.StatusBadRequest).JSON(Res{
