@@ -913,6 +913,44 @@ func TaskSuccess(c *fiber.Ctx) error {
 	})
 }
 
+// ไม่อนุมัติให้งานผ่าน
+// NoSuccess godoc
+// @Summary ปฏิเสธการอนุมัติงาน(กลับไปแก้ไขก่อนน้อง)
+// @Tags Assignor
+// @Accept json
+// @Produce json
+// @Param request body assignor.NoSuccessInfo true "ข้อมูลปฏิเสธการอนุมัติงาน(กลับไปแก้ไขก่อนน้อง)"
+// @Success 200 {object} Res
+// @Failure 400 {object} Res
+// @Router /api/nosuccess [post]
+func NoSuccess(c *fiber.Ctx) error {
+	c.Set("Content-Type", "application/json; charset=utf-8")
+	var nosuccesinfo assignor.NoSuccessInfo
+
+	err := c.BodyParser(&nosuccesinfo)
+	if err != nil {
+		log.Print("[Error] รูปแบบข้อมูลปฏิเสธการอนุมัติงานไม่ถูกต้อง")
+		return c.Status(fiber.StatusBadRequest).JSON(Res{
+			Success: false,
+			Message: "รูปแบบข้อมูลปฏิเสธการอนุมัติงานไม่ถูกต้อง",
+		})
+	} else {
+		err = assignor.NoSuccess(config.DB, nosuccesinfo)
+		if err != nil {
+			log.Print(err)
+			return c.Status(fiber.StatusBadRequest).JSON(Res{
+				Success: false,
+				Message: "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
+			})
+		}
+	}
+	log.Print("[System] ปฏิเสธการอนุมัติเสร็จสิ้นงาน: ", nosuccesinfo.Task_id)
+	return c.JSON(Res{
+		Success: true,
+		Message: "ปฏิเสธการอนุมัติเสร็จสิ้นงาน",
+	})
+}
+
 // รับงาน
 // Lrubtask godoc
 // @Summary การรับงาน

@@ -303,6 +303,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/nosuccess": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Assignor"
+                ],
+                "summary": "ปฏิเสธการอนุมัติงาน(กลับไปแก้ไขก่อนน้อง)",
+                "parameters": [
+                    {
+                        "description": "ข้อมูลปฏิเสธการอนุมัติงาน(กลับไปแก้ไขก่อนน้อง)",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/assignor.NoSuccessInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    }
+                }
+            }
+        },
         "/api/perlrubTasks": {
             "get": {
                 "produces": [
@@ -1088,6 +1127,20 @@ const docTemplate = `{
                 }
             }
         },
+        "assignor.NoSuccessInfo": {
+            "type": "object",
+            "properties": {
+                "detail": {
+                    "type": "string"
+                },
+                "personnel_id": {
+                    "type": "integer"
+                },
+                "task_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "assignor.RemoveReportInfo": {
             "type": "object",
             "properties": {
@@ -1407,8 +1460,16 @@ const docTemplate = `{
                     "description": "Tasks_detail",
                     "type": "string"
                 },
+                "nosuccess_detail": {
+                    "description": "Personnels",
+                    "type": "string"
+                },
                 "people_needed": {
                     "description": "Tasks_detail",
+                    "type": "integer"
+                },
+                "personnel_count": {
+                    "description": "Personnels",
                     "type": "integer"
                 },
                 "priority_name": {

@@ -58,6 +58,15 @@ definitions:
         description: Tasks_detail
         type: string
     type: object
+  assignor.NoSuccessInfo:
+    properties:
+      detail:
+        type: string
+      personnel_id:
+        type: integer
+      task_id:
+        type: integer
+    type: object
   assignor.RemoveReportInfo:
     properties:
       personnel_id:
@@ -275,8 +284,14 @@ definitions:
       location:
         description: Tasks_detail
         type: string
+      nosuccess_detail:
+        description: Personnels
+        type: string
       people_needed:
         description: Tasks_detail
+        type: integer
+      personnel_count:
+        description: Personnels
         type: integer
       priority_name:
         description: Priority_type
@@ -541,6 +556,31 @@ paths:
       summary: การรับงาน
       tags:
       - Worker
+  /api/nosuccess:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ข้อมูลปฏิเสธการอนุมัติงาน(กลับไปแก้ไขก่อนน้อง)
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/assignor.NoSuccessInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Res'
+      summary: ปฏิเสธการอนุมัติงาน(กลับไปแก้ไขก่อนน้อง)
+      tags:
+      - Assignor
   /api/perlrubTasks:
     get:
       produces:

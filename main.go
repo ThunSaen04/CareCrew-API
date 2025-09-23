@@ -75,6 +75,7 @@ func main() {
 	app.Get("/api/gettaskevidence/:taskID", handlers.GetTaskEvidence) // เรียกข้อมูลที่ผู้ใช้ส่งงานมา
 	//app.Post("/api/tasksuccescheck", nil)                             // โหลดข้อมูลที่ผู้ใช้ส่งเข้ามา สำหรับตรวจสอบงาน
 	app.Post("/api/tasksuccess", handlers.TaskSuccess) // การอนุมัติงาน(เสร็จสิ้นงาน)..
+	app.Post("/api/nosuccess", handlers.NoSuccess)     // การอนุมัติงาน(ปฏิเสธ)
 	//app.Post("/api/loaddetailfromreport", nil)                        // โหลดข้อมูลงานจาก รีพอร์ต
 
 	//ผู้รับงาน
