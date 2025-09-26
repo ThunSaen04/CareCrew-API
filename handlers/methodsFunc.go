@@ -1257,12 +1257,73 @@ func UpdateProfile(c *fiber.Ctx) error {
 	})
 }
 
+// เรียกข้อมูลประวัติแจ้งเตือน
+// GetNotis godoc
+// @Summary เรียกข้อมูลประวัติแจ้งเตือน
+// @Tags GetMethods
+// @Produce json
+// @Success 200 {array} models.NotificationInfo
+// @Failure 400 {object} Res
+// @Router /api/notis [get]
+func GetNotis(c *fiber.Ctx) error {
+	c.Set("Content-Type", "application/json; charset=utf-8")
+	data, err := models.GetNoti(config.DB)
+	if err != nil {
+		log.Print(err)
+		return c.Status(fiber.StatusBadRequest).JSON(Res{
+			Success: false,
+			Message: "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
+		})
+	}
+	log.Print("[System] พบการเรียกข้อมูลประวัติแจ้งเตือน")
+	return c.JSON(data)
+}
+
+// ดูประวัติแจ้งเตือน
+// ReadNotis godoc
+// @Summary ดูประวัติแจ้งเตือน
+// @Tags PostMethods
+// @Accept json
+// @Produce json
+// @Param request body models.ReadNotisInfo true "ข้อมูลแจ้งเตือนที่จะอัพเดท"
+// @Success 200 {object} Res
+// @Failure 400 {object} Res
+// @Router /api/readnotis [post]
+func ReadNotis(c *fiber.Ctx) error {
+	c.Set("Content-Type", "application/json; charset=utf-8")
+
+	var readnotisinfo models.ReadNotisInfo
+	err := c.BodyParser(&readnotisinfo)
+	if err != nil {
+		log.Print("[Error] รูปแบบข้อมูลการดูประวัติแจ้งเตือนไม่ถูกต้อง")
+		return c.Status(fiber.StatusBadRequest).JSON(Res{
+			Success: false,
+			Message: "รูปแบบข้อมูลการดูประวัติแจ้งเตือนไม่ถูกต้อง",
+		})
+	} else {
+		err = models.ReadNotis(config.DB, readnotisinfo)
+		if err != nil {
+			log.Print(err)
+			return c.Status(fiber.StatusBadRequest).JSON(Res{
+				Success: false,
+				Message: "เกิดข้อผิดพลาดกรุณาติดต่อทีมงานที่เกี่ยวข้องเพื่อแก้ไข",
+			})
+		}
+	}
+	log.Print("[System] พบการเรียกข้อมูลประวัติแจ้งเตือน")
+	return c.JSON(fiber.Map{
+		"success": true,
+		"message": "ส่งแจ้งเตือนสำเร็จแล้ว",
+	})
+}
+
 // ส่งแจ้งเตือน
 func SendFCM(c *fiber.Ctx) error {
 	c.Set("Content-Type", "application/json; charset=utf-8")
 	var fcmInfo struct {
-		Title string `json:"title"`
-		Body  string `json:"body"`
+		Title  string `json:"title"`
+		Body   string `json:"body"`
+		TaskId int    `json:"task_id"`
 	}
 	err := c.BodyParser(&fcmInfo)
 	if err != nil {
@@ -1272,7 +1333,7 @@ func SendFCM(c *fiber.Ctx) error {
 			"message": "รูปแบบส่งแจ้งเตือนไม่ถูกต้อง",
 		})
 	}
-	err = orther.SendNotificationToAll(config.DB, fcmInfo.Title, fcmInfo.Body)
+	err = orther.SendNotificationToAll(config.DB, fcmInfo.Title, fcmInfo.Body, fcmInfo.TaskId)
 	if err != err {
 		log.Print("[Error] เกิดข้อผิดพลาดในการส่งแจ้งเตือน")
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{

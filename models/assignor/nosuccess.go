@@ -117,10 +117,11 @@ func NoSuccess(db *sqlx.DB, nosuccessinfo NoSuccessInfo) error {
 
 		sendinfo := orther.SendNotiInfo{
 			Task_id: nosuccessinfo.Task_id,
+			Detail:  nosuccessinfo.Detail,
 			Title:   "งาน " + task.Title,
 			Body:    "ไม่อนุมัติ กรุณาแก้ไขงาน",
 		}
-		orther.SendNotiSuccessToPerInTask(db, &sendinfo)
+		orther.SendNotiSuccessToPerInTask(db, &sendinfo) //
 	} else {
 		return errors.New("ไม่พบงาน")
 	}

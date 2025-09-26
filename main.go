@@ -55,6 +55,7 @@ func main() {
 	app.Get("/api/persubmittasksbor/:personnelID/:taskID", handlers.GetSumbitTaskWithID) // ผู้ใช้คนนี้ส่งงานนี้ยัง?
 	app.Get("/api/tasktypelist", handlers.GetTaskTypeList)                               // เรียกข้อมูลประเภทงานที่มี
 	app.Get("/api/taskprioritylist", handlers.GetTaskPriorityList)                       // เรียกข้อมูลลำดับความสำคัญ
+	app.Get("/api/notis", handlers.GetNotis)                                             // เรียกข้อมูลแจ้งเตือน
 
 	//Post Methods
 	//app.Post("/api/login", handlers.Auth)          // ล็อคอิน
@@ -76,6 +77,7 @@ func main() {
 	//app.Post("/api/tasksuccescheck", nil)                             // โหลดข้อมูลที่ผู้ใช้ส่งเข้ามา สำหรับตรวจสอบงาน
 	app.Post("/api/tasksuccess", handlers.TaskSuccess) // การอนุมัติงาน(เสร็จสิ้นงาน)..
 	app.Post("/api/nosuccess", handlers.NoSuccess)     // การอนุมัติงาน(ปฏิเสธ)
+	app.Post("/api/readnotis", handlers.ReadNotis)     // อัพเดทว่าดูแจ้งเตือนรึยัง
 	//app.Post("/api/loaddetailfromreport", nil)                        // โหลดข้อมูลงานจาก รีพอร์ต
 
 	//ผู้รับงาน

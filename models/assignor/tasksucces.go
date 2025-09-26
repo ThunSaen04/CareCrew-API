@@ -3,6 +3,7 @@ package assignor
 import (
 	"errors"
 	"log"
+	"time"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/project/carecrew/orther"
@@ -65,11 +66,13 @@ func TaskSuccess(db *sqlx.DB, taskID, personnel_id int) error {
 	}
 	sendinfo := orther.SendNotiInfo{
 		Task_id: taskID,
+		Detail:  time.Now().Format("2006-01-02 15:04:05-07"),
 		Title:   "งาน " + task.Title + " สิ้นสุดแล้ว!!",
 		Body:    "งานนี้สิ้นสุดเรียบร้อย",
 	}
 
-	orther.SendNotiSuccessToPerInTask(db, &sendinfo)
+	orther.SendNotiSuccessToPerInTask(db, &sendinfo) //
+
 	log.Printf("[System] ยืนยันการตรวบสอบงานหมายเลข: %d แล้ว", taskID)
 	return nil
 }

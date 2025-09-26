@@ -172,6 +172,21 @@ definitions:
         description: Tasks_assignment
         type: integer
     type: object
+  models.NotificationInfo:
+    properties:
+      body:
+        type: string
+      created_at:
+        type: string
+      noti_id:
+        type: integer
+      personnel_id:
+        type: integer
+      read:
+        type: boolean
+      title:
+        type: string
+    type: object
   models.PersonnelLrubTaskInfo:
     properties:
       personnel_id:
@@ -200,6 +215,13 @@ definitions:
       role_name:
         description: Role_types
         type: string
+    type: object
+  models.ReadNotisInfo:
+    properties:
+      noti_id:
+        type: integer
+      personnel_id:
+        type: integer
     type: object
   models.ReportInfo:
     properties:
@@ -581,6 +603,24 @@ paths:
       summary: ปฏิเสธการอนุมัติงาน(กลับไปแก้ไขก่อนน้อง)
       tags:
       - Assignor
+  /api/notis:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.NotificationInfo'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Res'
+      summary: เรียกข้อมูลประวัติแจ้งเตือน
+      tags:
+      - GetMethods
   /api/perlrubTasks:
     get:
       produces:
@@ -701,6 +741,31 @@ paths:
       summary: ผู้ใช้คนนี้ส่งงานนี้ยัง
       tags:
       - GetMethods
+  /api/readnotis:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: ข้อมูลแจ้งเตือนที่จะอัพเดท
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.ReadNotisInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.Res'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handlers.Res'
+      summary: ดูประวัติแจ้งเตือน
+      tags:
+      - PostMethods
   /api/register:
     post:
       consumes:

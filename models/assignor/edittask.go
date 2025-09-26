@@ -2,6 +2,7 @@ package assignor
 
 import (
 	"errors"
+	"strings"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/project/carecrew/orther"
@@ -28,6 +29,7 @@ func EditTask(db *sqlx.DB, edittaskinfo *EditTaskInfo) error {
 	defer tranX.Rollback()
 
 	//เช็คว่ามีงานนั้นจริงอ๊ะป่าว
+	var d []string
 	var exists bool
 	query := `
 			SELECT EXISTS (
@@ -65,6 +67,7 @@ func EditTask(db *sqlx.DB, edittaskinfo *EditTaskInfo) error {
 			if err != nil {
 				return errors.New("แก้ไข กำหนดส่งงาน ไม่สำเร็จ")
 			}
+			d = append(d, "แก้ไขกำหนดส่งงาน")
 		}
 
 		//ประเภทงาน
@@ -78,6 +81,7 @@ func EditTask(db *sqlx.DB, edittaskinfo *EditTaskInfo) error {
 			if err != nil {
 				return errors.New("แก้ไข ประเภทงาน ไม่สำเร็จ")
 			}
+			d = append(d, "แก้ไขประเภทงาน")
 		}
 		//หัวข้องาน
 		if len(edittaskinfo.Title) != 0 && edittaskinfo.Title != taskinfo.Title {
@@ -91,6 +95,7 @@ func EditTask(db *sqlx.DB, edittaskinfo *EditTaskInfo) error {
 			if err != nil {
 				return errors.New("แก้ไข หัวข้องาน ไม่สำเร็จ")
 			}
+			d = append(d, "แก้ไขหัวข้องาน")
 		}
 		//รายละเอียดงาน
 		if len(edittaskinfo.Detail) != 0 && edittaskinfo.Detail != taskinfo.Detail {
@@ -103,6 +108,7 @@ func EditTask(db *sqlx.DB, edittaskinfo *EditTaskInfo) error {
 			if err != nil {
 				return errors.New("แก้ไข รายละเอียดงาน ไม่สำเร็จ")
 			}
+			d = append(d, "แก้ไขรายละเอียดงาน")
 		}
 		//สถานที่งาน
 		if len(edittaskinfo.Location) != 0 && edittaskinfo.Location != taskinfo.Location {
@@ -115,6 +121,7 @@ func EditTask(db *sqlx.DB, edittaskinfo *EditTaskInfo) error {
 			if err != nil {
 				return errors.New("แก้ไข สถานที่งาน ไม่สำเร็จ")
 			}
+			d = append(d, "แก้ไขสถานที่งาน")
 		}
 		//ความสำคัญงงาน
 		if edittaskinfo.Priority_type_id != 0 && edittaskinfo.Priority_type_id != taskinfo.Priority_type_id {
@@ -127,6 +134,7 @@ func EditTask(db *sqlx.DB, edittaskinfo *EditTaskInfo) error {
 			if err != nil {
 				return errors.New("แก้ไข ความสำคัญงาน ไม่สำเร็จ")
 			}
+			d = append(d, "แก้ไขความสำคัญงาน")
 		}
 		//จำนวนบุคลากรที่ต้องการ
 		if edittaskinfo.People_needed != 0 && edittaskinfo.People_needed != taskinfo.People_needed {
@@ -139,6 +147,7 @@ func EditTask(db *sqlx.DB, edittaskinfo *EditTaskInfo) error {
 			if err != nil {
 				return errors.New("แก้ไข จำนวนบุคลากรที่ต้องการ ไม่สำเร็จ")
 			}
+			d = append(d, "แก้ไขจำนวนบุคลากรที่ต้องการ")
 		}
 
 		query = `
@@ -170,11 +179,12 @@ func EditTask(db *sqlx.DB, edittaskinfo *EditTaskInfo) error {
 
 	sendinfo := orther.SendNotiInfo{
 		Task_id: edittaskinfo.Task_id,
+		Detail:  strings.Join(d, ", "),
 		Title:   "งาน " + edittaskinfo.Title,
 		Body:    "มีการแก้ไขรายละเอียดงาน",
 	}
 
-	orther.SendNotiSuccessToPerInTask(db, &sendinfo)
+	orther.SendNotiSuccessToPerInTask(db, &sendinfo) //
 
 	return nil
 }

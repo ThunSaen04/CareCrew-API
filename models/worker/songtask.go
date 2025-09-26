@@ -2,6 +2,7 @@ package worker
 
 import (
 	"errors"
+	"time"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/project/carecrew/orther"
@@ -21,35 +22,34 @@ type submitTaskInfo struct {
 func Songtask(db *sqlx.DB, persongTaskInfo *PerSongTaskInfo) error {
 
 	tranX, err := db.Beginx()
-
-	defer tranX.Rollback()
-
-	//เช็คว่ามีงานนั้นจริงอ๊ะป่าว หรือว่าส่งงานไปยัง???
-	var exists bool
-	query := `
-		SELECT EXISTS (
-			SELECT 1 FROM "Tasks_assignment"
-			WHERE task_id = $1 AND personnel_id = $2 AND submit = false
-		)
-	`
-	err = tranX.Get(&exists, query, persongTaskInfo.Task_id, persongTaskInfo.Personnel_id)
 	if err != nil {
 		return err
 	}
-	if exists {
-		//อัพเดท submit ให้เป็น True
-		var assignment_id int
-		err = tranX.QueryRow(`
+	defer tranX.Rollback()
+
+	var assignment_id int
+	query := `
+		SELECT assignment_id, submit
+		FROM "Tasks_assignment"
+		WHERE task_id = $1 AND personnel_id = $2
+	`
+	var submit bool
+	err = tranX.QueryRow(query, persongTaskInfo.Task_id, persongTaskInfo.Personnel_id).
+		Scan(&assignment_id, &submit)
+	if err != nil {
+		return errors.New("ไม่พบงานที่รับไว้")
+	}
+
+	if !submit {
+		_, err = tranX.Exec(`
 			UPDATE "Tasks_assignment"
 			SET submit = true, submit_at = NOW()
-			WHERE personnel_id = $1 AND task_id = $2
-			RETURNING assignment_id
-		`, persongTaskInfo.Personnel_id, persongTaskInfo.Task_id).Scan(&assignment_id)
+			WHERE assignment_id = $1
+		`, assignment_id)
 		if err != nil {
 			return err
 		}
 
-		//ใส่ข้อมูลในการส่งงาน
 		_, err = tranX.Exec(`
 			INSERT INTO "Tasks_attachments" (assignment_id, file, uploaded_at)
 			VALUES ($1, $2, NOW())
@@ -58,7 +58,6 @@ func Songtask(db *sqlx.DB, persongTaskInfo *PerSongTaskInfo) error {
 			return err
 		}
 
-		//ตรวจสอบว่าส่งครบยัง ถ้าส่งครบทุกคนก็เปลี่ยนสถานะงานซะ
 		var info submitTaskInfo
 		query := `
 			SELECT 
@@ -66,8 +65,8 @@ func Songtask(db *sqlx.DB, persongTaskInfo *PerSongTaskInfo) error {
 				SUM(CASE WHEN submit = true THEN 1 ELSE 0 END) AS submitted_count
 			FROM "Tasks_assignment"
 			WHERE task_id = $1
-			`
-		err := tranX.Get(&info, query, persongTaskInfo.Task_id)
+		`
+		err = tranX.Get(&info, query, persongTaskInfo.Task_id)
 		if err != nil {
 			return err
 		}
@@ -82,20 +81,31 @@ func Songtask(db *sqlx.DB, persongTaskInfo *PerSongTaskInfo) error {
 				return err
 			}
 			sendinfo := orther.SendNotiInfo{
-				Title: "งานรอการตรวจสอบ!!",
-				Body:  "พบงานที่ต้องการ การตรวจสอบใหม่",
+				Task_id: persongTaskInfo.Task_id,
+				Detail:  time.Now().Format("2006-01-02 15:04:05-07"),
+				Title:   "งานรอการตรวจสอบ!!",
+				Body:    "พบงานที่ต้องการ การตรวจสอบใหม่",
 			}
-			orther.SendNotiSuccessToAssignor(db, &sendinfo)
+			orther.SendNotiSuccessToAssignor(db, &sendinfo) //
 		}
 
 	} else {
-		return errors.New("ไม่พบงานที่รับหรือพบว่ามีการส่งงานนี้แล้ว")
+		if persongTaskInfo.File != "" {
+			_, err = tranX.Exec(`
+				UPDATE "Tasks_attachments"
+				SET file = $1, uploaded_at = NOW()
+				WHERE assignment_id = $2
+			`, persongTaskInfo.File, assignment_id)
+			if err != nil {
+				return err
+			}
+		}
 	}
 
 	_, err = tranX.Exec(`
-			INSERT INTO "Worker_logs" (personnel_id, task_id, detail, file)
-			VALUES ($1, $2, $3, $4)
-		`, persongTaskInfo.Personnel_id, persongTaskInfo.Task_id, "ส่งงาน", persongTaskInfo.File)
+		INSERT INTO "Worker_logs" (personnel_id, task_id, detail, file)
+		VALUES ($1, $2, $3, $4)
+	`, persongTaskInfo.Personnel_id, persongTaskInfo.Task_id, "ส่งงาน", persongTaskInfo.File)
 	if err != nil {
 		return err
 	}

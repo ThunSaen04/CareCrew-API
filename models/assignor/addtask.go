@@ -76,7 +76,7 @@ func AddTask(db *sqlx.DB, addnewtaskinfo *AddTaskInfo) error {
 	if err != nil {
 		return err
 	}
-	orther.SendNotificationToAll(db, "งานใหม่มาแล้ว!!!", addnewtaskinfo.Title)
+	orther.SendNotificationToAll(db, "งานใหม่มาแล้ว!!!", addnewtaskinfo.Title, task_id)
 
 	return err
 }

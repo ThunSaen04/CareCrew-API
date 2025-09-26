@@ -342,6 +342,34 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/notis": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "GetMethods"
+                ],
+                "summary": "เรียกข้อมูลประวัติแจ้งเตือน",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.NotificationInfo"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    }
+                }
+            }
+        },
         "/api/perlrubTasks": {
             "get": {
                 "produces": [
@@ -515,6 +543,45 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/models.SubmitTaskWithID"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/readnotis": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PostMethods"
+                ],
+                "summary": "ดูประวัติแจ้งเตือน",
+                "parameters": [
+                    {
+                        "description": "ข้อมูลแจ้งเตือนที่จะอัพเดท",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ReadNotisInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handlers.Res"
                         }
                     },
                     "400": {
@@ -1302,6 +1369,29 @@ const docTemplate = `{
                 }
             }
         },
+        "models.NotificationInfo": {
+            "type": "object",
+            "properties": {
+                "body": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "noti_id": {
+                    "type": "integer"
+                },
+                "personnel_id": {
+                    "type": "integer"
+                },
+                "read": {
+                    "type": "boolean"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
         "models.PersonnelLrubTaskInfo": {
             "type": "object",
             "properties": {
@@ -1340,6 +1430,17 @@ const docTemplate = `{
                 "role_name": {
                     "description": "Role_types",
                     "type": "string"
+                }
+            }
+        },
+        "models.ReadNotisInfo": {
+            "type": "object",
+            "properties": {
+                "noti_id": {
+                    "type": "integer"
+                },
+                "personnel_id": {
+                    "type": "integer"
                 }
             }
         },
