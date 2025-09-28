@@ -87,9 +87,14 @@ func SendNotificationToAll(db *sqlx.DB, title, body string, taskid int) error {
 
 	log.Print("[System] Success:", resp.SuccessCount, " Failure:", resp.FailureCount)
 
-	for _, token := range tokens {
-		var personnelID int
-		db.Get(&personnelID, `SELECT personnel_id FROM "FCM_Tokens" WHERE token=$1`, token)
+	var personnelIDs []int
+	err = db.Select(&personnelIDs, `SELECT personnel_id FROM "Personnels"`)
+	if err != nil {
+		log.Print("[Error] ไม่สามารถเรียกข้อมูล personnel_id ได้:", err)
+		return err
+	}
+
+	for _, personnelID := range personnelIDs {
 		saveNotification(db, personnelID, title, body, map[string]string{
 			"task_id": fmt.Sprint(taskid),
 		})
@@ -139,9 +144,18 @@ func SendNotiSuccessToPerInTask(db *sqlx.DB, sendnotiinfo *SendNotiInfo) error {
 
 	log.Print("[System] Success:", resp.SuccessCount, " Failure:", resp.FailureCount)
 
-	for _, token := range tokens {
-		var personnelID int
-		db.Get(&personnelID, `SELECT personnel_id FROM "FCM_Tokens" WHERE token=$1`, token)
+	var personnelIDs []int
+	err = db.Select(&personnelIDs, `
+		SELECT personnel_id 
+		FROM "Tasks_assignment" 
+		WHERE task_id = $1
+	`, sendnotiinfo.Task_id)
+	if err != nil {
+		log.Print("[Error] ไม่สามารถเรียกข้อมูล personnel_id ได้:", err)
+		return err
+	}
+
+	for _, personnelID := range personnelIDs {
 		saveNotification(db, personnelID, sendnotiinfo.Title, sendnotiinfo.Body, map[string]string{
 			"task_id": fmt.Sprint(sendnotiinfo.Task_id),
 			"detail":  fmt.Sprint(sendnotiinfo.Detail),
@@ -192,9 +206,18 @@ func SendNotiSuccessToAssignor(db *sqlx.DB, sendnotiinfo *SendNotiInfo) error {
 
 	log.Print("[System] Success:", resp.SuccessCount, " Failure:", resp.FailureCount)
 
-	for _, token := range tokens {
-		var personnelID int
-		db.Get(&personnelID, `SELECT personnel_id FROM "FCM_Tokens" WHERE token=$1`, token)
+	var personnelIDs []int
+	err = db.Select(&personnelIDs, `
+		SELECT personnel_id 
+		FROM "Personnels" 
+		WHERE role_type_id = 1
+	`)
+	if err != nil {
+		log.Print("[Error] ไม่สามารถเรียกข้อมูล personnel_id ได้:", err)
+		return err
+	}
+
+	for _, personnelID := range personnelIDs {
 		saveNotification(db, personnelID, sendnotiinfo.Title, sendnotiinfo.Body, map[string]string{
 			"task_id": fmt.Sprint(sendnotiinfo.Task_id),
 			"detail":  fmt.Sprint(sendnotiinfo.Detail),

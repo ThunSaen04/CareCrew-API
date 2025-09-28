@@ -12,6 +12,7 @@ type TaskEvidenceInfo struct {
 	Task_title    string   `db:"title" json:"title"`                 //Tasks_detail
 	Detail        string   `db:"detail" json:"detail"`               //Tasks_detail
 	Assigned_by   string   `db:"assigned_by" json:"assigned_by"`     //Personnels
+	Assigned_id   int      `db:"assigned_id" json:"assigned_id"`     //Personnels
 	Assignment_id int      `db:"assignment_id" json:"assignment_id"` //Tasks_assignment
 	File          string   `db:"file" json:"-"`                      //Tasks_attachments
 	Uploaded_at   string   `db:"uploaded_at" json:"uploaded_at"`     //Tasks_attachments
@@ -22,7 +23,7 @@ func GetTaskEvidence(db *sqlx.DB, task_id int) ([]TaskEvidenceInfo, error) {
 
 	var taskevidenceinfo []TaskEvidenceInfo
 	query := `
-        SELECT tas.task_id, tas.assignment_id, tat.file, tat.Uploaded_at, td.title, td.detail, p.first_name || ' ' || p.last_name AS assigned_by
+        SELECT tas.task_id, tas.assignment_id, tat.file, tat.Uploaded_at, td.title, td.detail, p.first_name || ' ' || p.last_name AS assigned_by, tas.personnel_id AS assigned_id
         FROM "Tasks_assignment" tas
         LEFT JOIN "Tasks_detail" td ON tas.task_id = td.task_id
         LEFT JOIN "Personnels" p ON td.assigned_by = p.personnel_id

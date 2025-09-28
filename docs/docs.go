@@ -1501,6 +1501,10 @@ const docTemplate = `{
                     "description": "Personnels",
                     "type": "string"
                 },
+                "assigned_id": {
+                    "description": "Personnels",
+                    "type": "integer"
+                },
                 "assignment_id": {
                     "description": "Tasks_assignment",
                     "type": "integer"
