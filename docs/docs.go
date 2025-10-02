@@ -1378,6 +1378,9 @@ const docTemplate = `{
                 "created_at": {
                     "type": "string"
                 },
+                "data": {
+                    "type": "object"
+                },
                 "noti_id": {
                     "type": "integer"
                 },

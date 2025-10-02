@@ -178,6 +178,8 @@ definitions:
         type: string
       created_at:
         type: string
+      data:
+        type: object
       noti_id:
         type: integer
       personnel_id:

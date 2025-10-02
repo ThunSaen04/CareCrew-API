@@ -1,25 +1,27 @@
 package models
 
 import (
+	"encoding/json"
 	"errors"
 
 	"github.com/jmoiron/sqlx"
 )
 
 type NotificationInfo struct {
-	Noti_id      int    `db:"noti_id" json:"noti_id"`
-	Personnel_Id int    `db:"personnel_id" json:"personnel_id"`
-	Title        string `db:"title" json:"title"`
-	Body         string `db:"body" json:"body"`
-	Read         bool   `db:"read" json:"read"`
-	Created_at   string `db:"created_at" json:"created_at"`
+	Noti_id      int             `db:"noti_id" json:"noti_id"`
+	Personnel_Id int             `db:"personnel_id" json:"personnel_id"`
+	Title        string          `db:"title" json:"title"`
+	Body         string          `db:"body" json:"body"`
+	Read         bool            `db:"read" json:"read"`
+	Data         json.RawMessage `db:"data" json:"data" swaggertype:"object"`
+	Created_at   string          `db:"created_at" json:"created_at"`
 }
 
 func GetNoti(db *sqlx.DB) ([]NotificationInfo, error) {
 	notis := []NotificationInfo{}
 
 	query := `
-		SELECT noti_id, personnel_id, title, body, read, created_at
+		SELECT noti_id, personnel_id, title, body, data, read, created_at
 		FROM "Notifications"
 		ORDER BY created_at DESC
 	`
