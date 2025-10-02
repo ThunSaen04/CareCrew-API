@@ -1556,6 +1556,10 @@ const docTemplate = `{
                     "description": "Personnels",
                     "type": "string"
                 },
+                "completed_at": {
+                    "description": "Tasks",
+                    "type": "string"
+                },
                 "created_at": {
                     "description": "Tasks",
                     "type": "string"
