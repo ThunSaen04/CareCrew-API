@@ -24,8 +24,8 @@ type Res struct { //สำหรับ Swagger
 }
 
 var Name = "CareCrew Backend API"
-var Versions = "0.2.6"
-var Last_Update = "09-29-25"
+var Versions = "0.2.7"
+var Last_Update = "10-2-25"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
